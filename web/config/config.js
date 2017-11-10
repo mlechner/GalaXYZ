@@ -2,7 +2,7 @@ var configParams = {
 	"db_host": "localhost",
 	"db_port": 5432,
 	"db_name": "nogo_dijkstra",
-	"db_schema: "public",
+	"db_schema": "public",
 	"db_user": "postgres",
 	"db_pass": "",
 	"geo_srid": 4326
