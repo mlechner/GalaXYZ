@@ -1,0 +1,14 @@
+{
+"db_host": "localhost",
+"db_port": 5432,
+"db_name": "galaxyz",
+"db_schema": "public",
+"db_user": "postgres",
+"db_pwd": "pwd",
+"geo_srid":4326,
+"geo_bbox": 
+	[8.24389890034,
+	48.9420024184,
+	8.55974321228,
+	49.0789748009]
+}
