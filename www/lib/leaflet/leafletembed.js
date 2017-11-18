@@ -5,7 +5,7 @@ var plotlayers=[];
 
 function initmap() {
 	// set up the map
-	var map = new L.Map('map');
+	map = new L.Map('map');
 
 	// create the tile layer with correct attribution
 	var osmUrl='http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png';
