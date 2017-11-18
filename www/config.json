@@ -1,10 +1,10 @@
 {
 "db_host": "localhost",
 "db_port": 5432,
-"db_name": "galaxyz",
+"db_name": "nogo_dijkstra",
 "db_schema": "public",
 "db_user": "postgres",
-"db_pwd": "pwd",
+"db_pwd": "12345",
 "geo_srid":4326,
 "geo_bbox": 
 	[8.24389890034,

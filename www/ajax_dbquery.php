@@ -7,7 +7,7 @@
 	// creates db connection from functions page
 	$conn = dbconn();
 	$geometry = "";
-	$sql = "SELECT ST_AsGeoJson(geom) AS geom FROM polygons";
+	$sql = "SELECT ST_AsGeoJson(the_geom) AS geom FROM ways";
 
 	$result = pg_query( $sql ) or die('Query Failed: ' .pg_last_error());
 	$count = 0;

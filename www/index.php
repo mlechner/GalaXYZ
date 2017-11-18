@@ -11,11 +11,23 @@
 		<meta name = "viewport" content="width=device-width, initial-scale=1"/>
 		<title>GalaXYZ</title>
 		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet.draw/0.4.13/leaflet.draw.css">
+
+
 		<script src="lib/jquery.min.js"></script>
 		<link rel="stylesheet" href="lib/leaflet/leaflet.css" />
 		<script src="lib/leaflet/leaflet.js"></script>
 		<script type="text/javascript" src="lib/leaflet/leafletembed.js"></script>
+
 		<link rel="stylesheet" href="lib/stylesheet.css">
+		
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet.draw/0.4.13/leaflet.draw.js"></script>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/Turf.js/5.0.4/turf.min.js"></script>
+
+		<script type="text/javascript" src="js/map.plugins.js"></script>
+		<script type="text/javascript" src="js/draw.events.js"></script>
+		<script type="text/javascript" src="js/toolset.js"></script>
+		
 		
 		<!--- style created in lib/stylesheet -->
 		<style>
@@ -54,6 +66,8 @@
 
 			var panelDisp = 0; // indicator for panel displayed
 			initmap(); // initialises the leaflet map from leafletembed.js
+			addAllMapPlugins(); // At the map.plugins.js file
+			registerDrawEvents(); // At the draw.events.js file
 
 			function sendAjax(){
 				// calls an AJAX query to the file ajax_dbquery
@@ -68,8 +82,8 @@
 				console.log(result);
 				var newResult = JSON.parse(result); // convert string to json object
 				var coordArray = newResult.coordinates; // set coordinates to array
-				console.log(coordArray[0][0][0]); // lon of a single coord
-				console.log(coordArray[0][0][1]); // lat of a single coord
+				console.log(coordArray[0][0]); // lon of a single coord
+				console.log(coordArray[0][1]); // lat of a single coord
 			}
 
 			function panelDisplay(){
