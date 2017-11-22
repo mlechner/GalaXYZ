@@ -41,8 +41,8 @@ function addAllMapPlugins(){
 function getDrawControlPlugin(layer){
 
 	 var drawControl = new L.Control.Draw({
-	      position:'topright',
-	      draw: {polygon:true, rectangle:false, circle:false, polyline:true, marker:false},
+	      position:'topleft',
+	      draw: {circle:false, circlemarker:false},
 	      edit: {featureGroup: layer}
 	  });
 

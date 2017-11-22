@@ -31,9 +31,9 @@ function getWKT(list, type){
         }
         var feature = list[ii];
         var featureType = (feature.geometry.type).toUpperCase();
-        if(featureType === type.toUpperCase()){
-            featureWKT += (processFeature(feature, featureType)) + separator;
-        }        
+        
+        featureWKT += (processFeature(feature, featureType)) + separator;
+               
     }
 
     featureWKT += ")";
@@ -52,6 +52,7 @@ function getWKT(list, type){
 
         if(type.toUpperCase() === "POLYGON"){
             
+            console.log("Processing polygon");
             
             var separator = ",";
 
@@ -65,14 +66,35 @@ function getWKT(list, type){
                     }
                     geomWKT += coords[ii][lonIndex] + " " + coords[ii][latIndex] + separator;
                 }
-            // Close writting
+                
+                // Close writting
+                geomWKT += ")";
+            }
+        } // End polygon
+
+        if(type.toUpperCase() === "LINESTRING"){
+
+            console.log("Processing linestring");
+
+            var separator = ",";
+
+            for(var jj = 0; jj < feature.geometry.coordinates.length; jj++){
+                geomWKT = "(";
+                var coords = feature.geometry.coordinates[jj];
+
+                if(jj === (coords.length - 1)){
+                    separator = "";
+                }
+                geomWKT += coords[lonIndex] + " " + coords[latIndex] + separator;
+                
+                // Close writting
                 geomWKT += ")";
             }
         }
 
-
         return geomWKT;
-    }
+    
+    } // End linestring
 }
 
 
