@@ -26,6 +26,8 @@ function addAllMapPlugins(){
 		drawControl = getDrawControlPlugin(nogoAreas);
 		map.addControl(drawControl);
 
+		initRouting();
+
 	} else{
 		console.log("The 'map' variable doesn't exist or have not been initialised");
 	}
@@ -41,8 +43,8 @@ function addAllMapPlugins(){
 function getDrawControlPlugin(layer){
 
 	 var drawControl = new L.Control.Draw({
-	      position:'topright',
-	      draw: {polygon:true, rectangle:false, circle:false, polyline:true, marker:false},
+	      position:'topleft',
+	      draw: {circle:false, circlemarker:false},
 	      edit: {featureGroup: layer}
 	  });
 
