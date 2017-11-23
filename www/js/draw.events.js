@@ -18,6 +18,7 @@ var nogo_Line = [];
 function registerDrawEvents(){
 
 	// Check if a draw control have been added or not
+
 	if(drawControl){
 
 		console.log("Registering draw events on the map");
@@ -26,8 +27,9 @@ function registerDrawEvents(){
 		map.on(L.Draw.Event.EDITED, e => onDrawEdited(e));
 		map.on(L.Draw.Event.DELETED, e => onDrawDeleted(e));
 
+	} 
 
-	} else
+  else
 		console.error("Draw control might not have been initialised on the map");
 }
 
@@ -84,6 +86,15 @@ function onDrawCreated(e) {
       console.log((getWKT(nogo_Line, "LineString")));
 
    } // End polyline protocol
+
+   // Protocol for drawing points for routing
+   // This protocol is transfered to the routing.js -> /js/routing.js
+
+   if((e.layerType).toUpperCase() === "MARKER"){
+
+      console.log(layer.getLatLng());
+      addDirectionPoint(layer.getLatLng().lng, layer.getLatLng().lat);
+   }
 
 }
 

@@ -24,9 +24,11 @@
 		<script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet.draw/0.4.13/leaflet.draw.js"></script>
 		<script src="https://cdnjs.cloudflare.com/ajax/libs/Turf.js/5.0.4/turf.min.js"></script>
 
+
 		<script type="text/javascript" src="js/map.plugins.js"></script>
 		<script type="text/javascript" src="js/draw.events.js"></script>
 		<script type="text/javascript" src="js/toolset.js"></script>
+		<script type="text/javascript" src="js/routing.js"></script>
 		
 		
 		<!--- style created in lib/stylesheet -->

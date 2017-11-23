@@ -26,6 +26,8 @@ function addAllMapPlugins(){
 		drawControl = getDrawControlPlugin(nogoAreas);
 		map.addControl(drawControl);
 
+		initRouting();
+
 	} else{
 		console.log("The 'map' variable doesn't exist or have not been initialised");
 	}
