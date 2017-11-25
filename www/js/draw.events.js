@@ -64,6 +64,7 @@ function onDrawCreated(e) {
 
      	// Construct a WKT of all the polygons
      	console.log((getWKT(nogo_Poly, "Polygon")));
+      panel_addNogo(layer._leaflet_id);
 
   } // End polygon protocol
 
@@ -175,6 +176,7 @@ function onDrawDeleted(e){
 
        	// Remove it from the plot layer array
        	plotlayers.splice(index, 1);
+        panel_delNogo(layer._leaflet_id);
 
     });
 

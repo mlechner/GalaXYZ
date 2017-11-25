@@ -29,11 +29,13 @@
 		<script type="text/javascript" src="js/draw.events.js"></script>
 		<script type="text/javascript" src="js/toolset.js"></script>
 		<script type="text/javascript" src="js/routing.js"></script>
+		<script type="text/javascript" src="js/galaxyz.js"></script>
 		
 		
 		<!--- style created in lib/stylesheet -->
 		<style>
-        				
+        	
+        	
 		</style> 
 				
 	</head>
@@ -54,7 +56,11 @@
 					<button type="button" class="btn btn-default" onclick="sendAjax()">Click Me!</button>
 					<br><br><p>*open console (F12)</p>
 					<p>This button executes a SQL query, returning geometry of a polygon</p>
-					<p id="btn_result"></p>
+					<div style="border-bottom: 1px solid lightgrey;"></div>
+					<button type="button" style="margin-top: 5px;" class="btn btn-default" onclick="getnogo()">get nogo</button>
+					<div id="managenogo">
+						<!--populated by javascript -->						
+					</div>
 				</div>
 				<button id="btn_panel" type="button" class="btn btn-default" onclick="panelDisplay()">
 					<span class = "glyphicon glyphicon-menu-hamburger"></span>
@@ -67,39 +73,10 @@
 		<script type="text/javascript">
 
 			var panelDisp = 0; // indicator for panel displayed
+			var nogoCount = 0; // count of nogo areas for panel display
 			initmap(); // initialises the leaflet map from leafletembed.js
 			addAllMapPlugins(); // At the map.plugins.js file
 			registerDrawEvents(); // At the draw.events.js file
-
-			function sendAjax(){
-				// calls an AJAX query to the file ajax_dbquery
-				$.ajax({url: "ajax_dbquery.php", success: function(result){
-					//passes result to handleAjax function
-					handleAjax(result);
-				}});
-			}
-
-			// handles the result of the db ajax query
-			function handleAjax(result){
-				console.log(result);
-				var newResult = JSON.parse(result); // convert string to json object
-				var coordArray = newResult.coordinates; // set coordinates to array
-				console.log(coordArray[0][0]); // lon of a single coord
-				console.log(coordArray[0][1]); // lat of a single coord
-			}
-
-			function panelDisplay(){
-				// shows and hides the panel
-				var panel = $('#panel');
-				if(panelDisp == 0){
-					panel.show();
-					panelDisp = 1
-				} else {
-					panel.hide();
-					panelDisp = 0;
-				}
-				
-			}
 
 
 		</script>
