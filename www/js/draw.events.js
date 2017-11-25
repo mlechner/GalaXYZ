@@ -36,7 +36,7 @@ function registerDrawEvents(){
 
 /**
 * Event for draw created
-* @param {Object} e - Leaflet draw event layer
+* @param {L.Layer} e - Leaflet draw event layer
 */
 function onDrawCreated(e) {
 
@@ -103,7 +103,7 @@ function onDrawCreated(e) {
 * Event for draw edited
 * Will only treat item edited on the layer list
 * Computes the new geometry and replaces it at the plotlayers array 
-* @param {Object} e - Leaflet draw event layer
+* @param {L.Layer} e - Leaflet draw event layer
 */
 
 function onDrawEdited(e){
@@ -164,7 +164,7 @@ function onDrawEdited(e){
 * Event for draw edited
 * Will only treat item edited on the layer list
 * Computes the new geometry and replaces it at the plotlayers array 
-* @param {Object} e - Leaflet draw event layer
+* @param {L.Layer} e - Leaflet draw event layer
 */
 
 function onDrawDeleted(e){
@@ -213,7 +213,7 @@ function onDrawDeleted(e){
 
           }
         } // else
-        
+
     });
 
 } // onDrawDeleted 
@@ -226,7 +226,7 @@ function onDrawDeleted(e){
 /**
 * Refines the coordinates generated from the draw events and 
 * gets it ready to be converted to polygon format
-* @param {Object} layer - Leaflet layer
+* @param {L.Layer} layer - Leaflet layer
 * @return {Array} coordinates array in leaflet lat lng format 
 */
 function getFormatedCoords(layer){
@@ -259,9 +259,9 @@ function getFormatedCoords(layer){
 /**
 * Refines the coordinates generated from the draw events and 
 * gets it ready to be converted to polygon format
-* @param {Object} layer - Leaflet layer
-* @param {int} id - leaflet id of the original layer
-* @return {Geojson} polygon in geojson format
+* @param {L.Layer} layer - Leaflet layer
+* @param {Number} id - leaflet id of the original layer
+* @return {Feature} GeoJSON Feature: Polygon
 */
 function getTurfPolygon(coordsRefined, leaflet_id){
 
@@ -284,9 +284,9 @@ function getTurfPolygon(coordsRefined, leaflet_id){
 
 /**
 * Creates a turf line string from a leaflet layer
-* @param {Object} layer - Leaflet layer
-* @param {int} id - leaflet id of the original layer
-* @return {Geojson} linestring in geojson format
+* @param {L.Layer} layer - Leaflet layer
+* @param {Number} id - leaflet id of the original layer
+* @return {Feature} GeoJSON Feature: linestring
 */
 function getTurfLineString(layer, leaflet_id){
 
@@ -302,5 +302,42 @@ function getTurfLineString(layer, leaflet_id){
   turfLineString["id"] = leaflet_id;
 
   return turfLineString;
+
 }
+
+/**
+* Removes a polygon nogo area from the map and the list
+* @param {Number} leaflet_id - leaflet id of the layer to remove
+* @return {boolean} Returns true if the layer was removed
+*/
+
+function removeNogoPoly(leaflet_id) {
+
+  // Get the index of the item using its leaflet ID
+  var index = nogo_Poly.map(function(e) { return e.id; }).indexOf(leaflet_id);
+
+  if(index >= 0) {
+
+    // Remove from the list
+    nogo_Poly.splice(index, 1);
+
+    // Remove from the map (via the nogoAreas feature group)
+    nogoAreas.removeLayer(leaflet_id);
+
+    return true;
+
+  }
+
+  // If no index found => log an error 
+
+  else {
+
+    var error = "FATAL: Item cannot be found in the existing list with the supplied ID, perhaps the item not a nogo polygon?";
+    console.error(error);
+    alert(error);
+
+    return false
+  } 
+
+} // removeNogoPoly
 
