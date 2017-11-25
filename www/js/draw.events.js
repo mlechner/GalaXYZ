@@ -115,6 +115,8 @@ function onDrawEdited(e){
     layers.eachLayer(function (layer) {
 
       // Check if the edited item is a polygon item
+
+      // Get the index of the item using its leaflet ID
       var index = nogo_Poly.map(function(e) { return e.id; }).indexOf(layer._leaflet_id);
 
       if(index >= 0){
@@ -132,6 +134,8 @@ function onDrawEdited(e){
       } else {
 
         // Means polyline
+
+        // Get the index of the item using its leaflet ID
         index = nogo_Line.map(function(e) { return e.id; }).indexOf(layer._leaflet_id);
 
         // Re-confirm
@@ -171,17 +175,48 @@ function onDrawDeleted(e){
 
 	layers.eachLayer(function (layer) {
 
-		// Find index of the item deleted
-       	var index = plotlayers.map(function(e) { return e.id; }).indexOf(layer._leaflet_id);
+        // Check if the edited item is a polygon item
 
-       	// Remove it from the plot layer array
-       	plotlayers.splice(index, 1);
-        panel_delNogo(layer._leaflet_id);
+        // Get the index of the item using its leaflet ID
+        var index = nogo_Poly.map(function(e) { return e.id; }).indexOf(layer._leaflet_id);
 
+        if(index >= 0){
+
+          // Means Polygon
+
+          // Delete the edited feature in the list
+          nogo_Poly.splice(index, 1);
+
+          console.log("Polygon removed from the list");
+
+        } // if
+
+        else {
+
+          // Means polyline
+
+          // Get the index of the item using its leaflet ID
+          index = nogo_Line.map(function(e) { return e.id; }).indexOf(layer._leaflet_id);
+
+          // Re-confirm
+          if(index >= 0) {
+
+            // Delete the edited feature in the list
+            nogo_Line.splice(index, 1);
+
+            console.log("LineString removed from the list");
+
+          } else {
+
+            // It normally should not get to this stage, just doing this to keep track of things, in case!
+            console.error("FATAL: An error has occured, cannot keep track of the just edited item");
+
+          }
+        } // else
+        
     });
 
-    console.log(plotlayers);
-}
+} // onDrawDeleted 
 
 
 // ---------------------------------------------------------
