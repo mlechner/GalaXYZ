@@ -89,11 +89,10 @@ function renderDirectionPoint(point){
 function findRoute(from, to){
 
 	console.log("%cFinding route..................................", "background: green; color: white; font-size: large");
-	console.log(from , to);
+	console.log(getFromToPoints());
 
 	console.log("%cAvailable nogo areas............................", "background: red; color: white; font-size: large");
-	console.log((getWKT(nogo_Poly, "Polygon")));
-	console.log((getWKT(nogo_Line, "Linestriing")));
+	console.log(getAllNogoAreas());
 }
 
 /**
@@ -104,8 +103,7 @@ function refreshRoute(){
 	console.log("%Refreshing route..................................", "background: green; color: white; font-size: large");
 
 	console.log("%cAvailable nogo areas............................", "background: red; color: white; font-size: large");
-	console.log((getWKT(nogo_Poly, "Polygon")));
-	console.log((getWKT(nogo_Line, "Linestriing")));
+	console.log(getAllNogoAreas());
 }
 
 /**
@@ -118,4 +116,21 @@ function renderRoute(routeArray){
 
 function setRoutingCapability(toggle){
 	routingCapability = toggle;
+}
+
+function getAllNogoAreas(){
+
+	var allnogoareas = [];
+	allnogoareas["polygon"] = turf.feature(getWKT(nogo_Poly, "polygon"));
+	allnogoareas["linestring"] = turf.feature(getWKT(nogo_Line, "linestring"));
+
+	return allnogoareas;
+}
+
+function getFromToPoints(){
+
+	var dirPoints = [];
+	dirPoints["from"] = directionPoints[0]; 
+	dirPoints["to"] = directionPoints[1]; 
+	return dirPoints;
 }
