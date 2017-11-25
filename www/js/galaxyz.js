@@ -28,7 +28,7 @@ function panelDisplay(){
 	}
 	
 }
-
+//adds a feature to the panel when a new feature is created
 function panel_addNogo(id){
 
 	nogoCount += 1;
@@ -66,26 +66,32 @@ function panel_delNogo(id){
 }
 
 function toggleSave(ind,id){
+	//toggles the save glyphicon depending on the ind val,
+	//for the specific icon indivated by the id
 	if (ind == 0){
 		$('#saveglyph'+id).show();	
 	} else {
 		$('#saveglyph'+id).hide();	
 	}	
 }
-function saveDesc(id){
+//saves the description entered in the panel
+function saveDesc(id){	
 	desc = $('#desc'+id).val();
 	toggleSave(1,id);
+	//changes from input element to <p> element with the same value
 	$('#desc'+id).replaceWith('<p id="desc'+id+'">'+desc+'</p>');
-
+	//get the index of the nogo_poly array item with the specified layer id
 	var index = nogo_Poly.map(function(el) {
 	  return el.id;
 	}).indexOf(id);
-
+	//append to the description to the item in the nogo_Poly array 
 	nogo_Poly[index]['desc'] = desc;
 	console.log(nogo_Poly[index]);
 }
+//fetches all of the feature data
 function getnogo(){
-	var x = getAllNogoAreas();
+	//calls function to return all the features
 	console.log(getAllNogoAreas().polygon);
+	//print nogo_Poly array
 	console.log(nogo_Poly);
 }
