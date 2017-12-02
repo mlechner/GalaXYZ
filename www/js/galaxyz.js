@@ -29,29 +29,29 @@ function panelDisplay(){
 	
 }
 //adds a feature to the panel when a new feature is created
-function panel_addNogo(id){
+function panel_addNogo(leaflet_id){
 
 	nogoCount += 1;
 	//string containing the HTML to be appended when a nogo is added
-	addPoly = '<div class="row nogoitem" id="nogoitem'+id+'">\
+	addPoly = '<div class="row nogoitem" id="nogoitem'+leaflet_id+'">\
 				<div class="col-xs-2" style="padding-left: 0px; padding-top: 5px;">\
 					<span class="glyphicon glyphicon-stop" style="font-size: 2.0em;"></span>\
 				</div>\
 				<div class="col-xs-9" >\
 					<div class="row">\
-						<p class="objTitle" onclick="testfunc('+id+')">\
-							<b>Polygon '+id+'</b>\
+						<p class="objTitle" onclick="testfunc('+leaflet_id+')">\
+							<b>Polygon '+leaflet_id+'</b>\
 						</p>\
 					</div>\
 					<div class="row">\
-						<input id="desc'+id+'" type="text" class="form-control" placeholder="Add description"\
-						style="margin-bottom: 5px;" onfocus="toggleSave(0,'+id+')"></input>\
+						<input id="desc'+leaflet_id+'" type="text" class="form-control" placeholder="Add description"\
+						style="margin-bottom: 5px;" onfocus="toggleSave(0,'+leaflet_id+')"></input>\
 					</div>\
 				</div>\
 				<div class="col-xs-1" style="padding:0px; padding-top: 10px;">\
-					<span class="glyphicon glyphicon-trash" title="Delete feature" onclick="panel_delNogo('+id+')"></span>\
-					<span id="saveglyph'+id+'" class="glyphicon glyphicon-ok" \
-					title="Save description" onclick="saveDesc('+id+')"></span>\
+					<span class="glyphicon glyphicon-trash" title="Delete feature" onclick="removeNogoPoly('+leaflet_id+')"></span>\
+					<span id="saveglyph'+leaflet_id+'" class="glyphicon glyphicon-ok" \
+					title="Save description" onclick="saveDesc('+leaflet_id+')"></span>\
 				</div>\
 			</div>';
 	//prepends the nogo area to the nogo HTML list
@@ -60,38 +60,58 @@ function panel_addNogo(id){
 
 
 
-function panel_delNogo(id){
+function panel_delNogo(leaflet_id){
 	//removes html element from the nogo list				
-	$('#nogoitem'+id).remove();
+	$('#nogoitem'+leaflet_id).remove();
 }
 
-function toggleSave(ind,id){
+function toggleSave(ind,leaflet_id){
 	//toggles the save glyphicon depending on the ind val,
 	//for the specific icon indivated by the id
 	if (ind == 0){
-		$('#saveglyph'+id).show();	
+		$('#saveglyph'+leaflet_id).show();	
 	} else {
-		$('#saveglyph'+id).hide();	
+		$('#saveglyph'+leaflet_id).hide();	
 	}	
 }
 //saves the description entered in the panel
-function saveDesc(id){	
-	desc = $('#desc'+id).val();
-	toggleSave(1,id);
+function saveDesc(leaflet_id){	
+	desc = $('#desc'+leaflet_id).val();
+	toggleSave(1,leaflet_id);
 	//changes from input element to <p> element with the same value
-	$('#desc'+id).replaceWith('<p id="desc'+id+'">'+desc+'</p>');
+	$('#desc'+leaflet_id).replaceWith('<p id="desc'+leaflet_id+'" onclick="editDesc('+leaflet_id+')">'+desc+'</p>');
 	//get the index of the nogo_poly array item with the specified layer id
 	var index = nogo_Poly.map(function(el) {
 	  return el.id;
-	}).indexOf(id);
+	}).indexOf(leaflet_id);
 	//append to the description to the item in the nogo_Poly array 
 	nogo_Poly[index]['desc'] = desc;
 	console.log(nogo_Poly[index]);
 }
+function editDesc(leaflet_id){
+	desc = $('#desc'+leaflet_id).html();
+	html = '<input id="desc'+leaflet_id+'" type="text" class="form-control" placeholder="Add description"\
+			style="margin-bottom: 5px;" onfocus="toggleSave(0,'+leaflet_id+')" value="'+desc+'"></input>';
+	$('#desc'+leaflet_id).replaceWith(html);
+}
 //fetches all of the feature data
 function getnogo(){
 	//calls function to return all the features
-	console.log(getAllNogoAreas().polygon);
+	//console.log(getAllNogoAreas().polygon);
 	//print nogo_Poly array
-	console.log(nogo_Poly);
+	//console.log(nogo_Poly);
+	console.log(getFromToPoints());
+}
+
+function getClosestNode(x,y){
+	//console.log("in get closest node");
+	ajax_url = "ajax_closestNodes.php?x="+x+"&y="+y;
+	var id;
+	$.ajax({url: ajax_url, success: function(result){
+		//passes result to handleAjax function
+		//console.log("success function");
+		id = result;
+		return id;
+	}});
+	
 }
