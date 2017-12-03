@@ -17,6 +17,7 @@
 		<script src="lib/jquery.min.js"></script>
 		<link rel="stylesheet" href="lib/leaflet/leaflet.css" />
 		<script src="lib/leaflet/leaflet.js"></script>
+		<script src="https://unpkg.com/leaflet-ant-path" type="text/javascript"></script>
 		<script type="text/javascript" src="lib/leaflet/leafletembed.js"></script>
 
 		<link rel="stylesheet" href="lib/stylesheet.css">
@@ -73,11 +74,15 @@
 		
 		<script type="text/javascript">
 
+			var closestNodeID;
+
 			var panelDisp = 0; // indicator for panel displayed
 			var nogoCount = 0; // count of nogo areas for panel display
 			initmap(); // initialises the leaflet map from leafletembed.js
 			addAllMapPlugins(); // At the map.plugins.js file
 			registerDrawEvents(); // At the draw.events.js file
+
+
 
 
 		</script>
