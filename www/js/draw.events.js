@@ -14,6 +14,9 @@
 var nogo_Poly = [];
 var nogo_Line = [];
 
+var guides = new L.FeatureGroup();
+var path;
+
 
 function registerDrawEvents(){
 
@@ -21,22 +24,75 @@ function registerDrawEvents(){
 
 	if(drawControl){
 
+    // Add drawing guides
+    map.addLayer(guides);
+
 		console.log("Registering draw events on the map");
-		
+
 		map.on(L.Draw.Event.CREATED, e => onDrawCreated(e));
 		map.on(L.Draw.Event.EDITED, e => onDrawEdited(e));
 		map.on(L.Draw.Event.DELETED, e => onDrawDeleted(e));
+    map.on(L.Draw.Event.DRAWSTART, e => onDrawStart(e));
 
 	} 
-
   else
 		console.error("Draw control might not have been initialised on the map");
+}
+
+/**
+* Event for draw started
+* @param {L.Draw.Event} e - Leaflet draw event layer
+*/
+function onDrawStart(e) {
+
+  console.log("Draw start");
+
+  // Clear all the guide lines on the map
+  guides.clearLayers();
+
+  // Draw Start for MARKERS
+  //---------------------------------------
+  if((e.layerType).toUpperCase() === "MARKER"){
+
+
+      // Install mouse move listener on the map
+      //---------------------------------------
+      map.on("mousemove", function(e){
+        
+        // If there are more than one direction point ...
+        if(!(directionPoints[directionPoints.length - 1 ] === undefined)) {
+
+          // Clear previous guide layers  
+          guides.clearLayers();
+
+          // Create an antline
+          path = getAntLineForLastDirPoint(e.latlng);
+
+          // Add to the guide and show on map
+          guides.addLayer(path);
+        }
+
+      });
+
+      // If the drawing is stopped
+      //-----------------------------------
+      map.on('draw:drawstop', function () { 
+
+        // Switch off map move event to stop the ant line showing on the map
+        map.off("mousemove") ;
+
+        // Clear all the guide lines on the map
+        guides.clearLayers();
+
+      });
+
+   }
 }
 
 
 /**
 * Event for draw created
-* @param {Object} e - Leaflet draw event layer
+* @param {L.Draw.Event} e - Leaflet draw event layer
 */
 function onDrawCreated(e) {
 
@@ -93,8 +149,11 @@ function onDrawCreated(e) {
 
    if((e.layerType).toUpperCase() === "MARKER"){
 
-      console.log(layer.getLatLng());
+      if(directionPoints.length > 0){
+        map.addLayer(getAntLineForLastDirPoint(layer.getLatLng()));
+      }  
       addDirectionPoint(layer.getLatLng().lng, layer.getLatLng().lat);
+
    }
 
 }
@@ -103,7 +162,7 @@ function onDrawCreated(e) {
 * Event for draw edited
 * Will only treat item edited on the layer list
 * Computes the new geometry and replaces it at the plotlayers array 
-* @param {Object} e - Leaflet draw event layer
+* @param {L.Draw.Event} e - Leaflet draw event layer
 */
 
 function onDrawEdited(e){
@@ -164,7 +223,7 @@ function onDrawEdited(e){
 * Event for draw edited
 * Will only treat item edited on the layer list
 * Computes the new geometry and replaces it at the plotlayers array 
-* @param {Object} e - Leaflet draw event layer
+* @param {L.Draw.Event} e - Leaflet draw event layer
 */
 
 function onDrawDeleted(e){
@@ -213,7 +272,7 @@ function onDrawDeleted(e){
 
           }
         } // else
-        
+
     });
 
 } // onDrawDeleted 
@@ -226,7 +285,7 @@ function onDrawDeleted(e){
 /**
 * Refines the coordinates generated from the draw events and 
 * gets it ready to be converted to polygon format
-* @param {Object} layer - Leaflet layer
+* @param {L.Layer} layer - Leaflet layer
 * @return {Array} coordinates array in leaflet lat lng format 
 */
 function getFormatedCoords(layer){
@@ -259,9 +318,9 @@ function getFormatedCoords(layer){
 /**
 * Refines the coordinates generated from the draw events and 
 * gets it ready to be converted to polygon format
-* @param {Object} layer - Leaflet layer
-* @param {int} id - leaflet id of the original layer
-* @return {Geojson} polygon in geojson format
+* @param {L.Layer} layer - Leaflet layer
+* @param {Number} id - leaflet id of the original layer
+* @return {Feature} GeoJSON Feature: Polygon
 */
 function getTurfPolygon(coordsRefined, leaflet_id){
 
@@ -284,9 +343,9 @@ function getTurfPolygon(coordsRefined, leaflet_id){
 
 /**
 * Creates a turf line string from a leaflet layer
-* @param {Object} layer - Leaflet layer
-* @param {int} id - leaflet id of the original layer
-* @return {Geojson} linestring in geojson format
+* @param {L.Layer} layer - Leaflet layer
+* @param {Number} id - leaflet id of the original layer
+* @return {Feature} GeoJSON Feature: linestring
 */
 function getTurfLineString(layer, leaflet_id){
 
@@ -302,5 +361,42 @@ function getTurfLineString(layer, leaflet_id){
   turfLineString["id"] = leaflet_id;
 
   return turfLineString;
+
 }
+
+/**
+* Removes a polygon nogo area from the map and the list
+* @param {Number} leaflet_id - leaflet id of the layer to remove
+* @return {boolean} Returns true if the layer was removed
+*/
+
+function removeNogoPoly(leaflet_id) {
+
+  // Get the index of the item using its leaflet ID
+  var index = nogo_Poly.map(function(e) { return e.id; }).indexOf(leaflet_id);
+
+  if(index >= 0) {
+
+    // Remove from the list
+    nogo_Poly.splice(index, 1);
+
+    // Remove from the map (via the nogoAreas feature group)
+    nogoAreas.removeLayer(leaflet_id);
+
+    return true;
+
+  }
+
+  // If no index found => log an error 
+
+  else {
+
+    var error = "FATAL: Item cannot be found in the existing list with the supplied ID, perhaps the item not a nogo polygon?";
+    console.error(error);
+    alert(error);
+
+    return false
+  } 
+
+} // removeNogoPoly
 

@@ -9,6 +9,8 @@ var directionPoints = [];
 var reroute = false;
 var routingCapability = false;
 
+var node_id;
+
 
 function initRouting(){
 
@@ -21,8 +23,8 @@ function initRouting(){
 /**
 * Add a direction point
 * 
-* @param {int} x - Lon
-* @param {int} y  -lat
+* @param {number} x - lon
+* @param {number} y  -lat
 *  
 */
 function addDirectionPoint(x,y){
@@ -33,41 +35,11 @@ function addDirectionPoint(x,y){
 
 		var point = turf.point([x,y]);
 
-		if(directionPoints.length == 0){
+		// Find the closest node_id in the network and proces the new point
+		
+		getClosestNode(x,y, node_id => processNewPoint(node_id, point));
 
-			if(reroute) {
 
-				// Clear the markers and the route
-				directions.clearLayers();
-
-			}
-			reroute = false;
-
-			// Add marker and find NO route!
-			directionPoints.push(point);
-			renderDirectionPoint(point);
-		} 
-
-		else if(directionPoints.length == 1) {
-			
-			// Clear markers and route
-			directionPoints.push(point);
-			renderDirectionPoint(point);
-
-			findRoute(directionPoints[0], directionPoints[1]);
-
-			// Clear array -> this way, the array stays with a length of 2
-			directionPoints = [];
-
-			// Prepare for re-routing
-			reroute = true;
-
-		}
-
-		if(directionPoints.length > 2) {
-
-			console.log("%cFATAL Something went wrong, the directionPoints array cannot be tracked, length is more than 2 ", "background: red; color: white; font-size: x-large");
-		}
 	} // if routing capabilty is enabled
 
 	else
@@ -75,21 +47,97 @@ function addDirectionPoint(x,y){
 
 } // Add direction point
 
+/**
+* Process a new point on the map with its closest node ID
+* Serves as a callback funtion from the ajax _ php request
+* Nothing happens if the node_id is null or undefined
+*
+* @param {number} node_id  -  Closest node id of the point
+* @param {Geojson} point - Point clicked on the map 
+*/
+function processNewPoint(node_id, point){
+
+	// Check if the node ID is valid
+	if(node_id === undefined || node_id === null) {
+
+		console.log("%cClosest node cannot be found on the network, cannot proccess point!", "background: red; color: white; font-size: large");
+
+	} 
+
+	else {
+
+		// Attach the closest node ID to the point
+		point.node_id = node_id;
+
+		// Create Leaflet latlng
+		point.latlng = [point.geometry.coordinates[1], point.geometry.coordinates[0]];
+
+		// Add point to list
+		directionPoints.push(point);
+		renderDirectionPoint(node_id, point);
+
+		// How many points have been added ?
+		var length = directionPoints.length;
+
+		// Find route if the point is greater than or equal to 2
+		if(length >= 2) {
+
+			// Take the last two items on the list
+			var fromNodeID = directionPoints[length - 2].node_id;
+			var toNodeID = directionPoints[length - 1].node_id;
+
+			// Find the route with the nodeIDs
+			findRoute(fromNodeID, toNodeID);
+		}
+	}
+}
 
 
-function renderDirectionPoint(point){
+/**
+* Handles the general rendering of the point on the map
+* 
+* To be worked on later by adding more listeners and bind popup
 
-	var marker = L.geoJSON(point);
-	directions.addLayer(marker);
+* @param {number} node_id  -  Closest node id of the point
+* @param {Geojson} point - Point clicked on the map
+*/
+function renderDirectionPoint(node_id, point){
+
+	// Create marker from Geojson
+	marker = new L.marker([point.geometry.coordinates[1], point.geometry.coordinates[0]], {draggable:'true'});
+
+	//----------------------------------------
+
+	// Add ondrag event. 
+	// TODO: Reroute!
+  	marker
+  	.on('drag', function(event){
+
+	    var newMarker = event.target;
+	    var position = newMarker.getLatLng();
+	    marker.setLatLng(position);
+	    map.panTo(position);
+	    
+	})
+
+	// Simple tooltip
+	.bindTooltip("Node ID: " + node_id, {direction: 'top', permanent: true});
+
+	//----------------------------------------
+
+  	directions.addLayer(marker);
+
+  	//----------------------------------------
+
 }
 
 /**
 * Finds route between two points within the db network
 */
-function findRoute(from, to){
+function findRoute(from_node_id, to_node_id){
 
 	console.log("%cFinding route..................................", "background: green; color: white; font-size: large");
-	console.log(getFromToPoints());
+	console.log("From node ID: " + from_node_id + " ;\nTo node ID: ", to_node_id);
 
 	console.log("%cAvailable nogo areas............................", "background: red; color: white; font-size: large");
 	console.log(getAllNogoAreas());
@@ -130,7 +178,30 @@ function getAllNogoAreas(){
 function getFromToPoints(){
 
 	var dirPoints = [];
-	dirPoints["from"] = directionPoints[0]; 
-	dirPoints["to"] = directionPoints[1]; 
+	dirPoints["from"] = directionPoints[0].node_id; 
+	dirPoints["to"] = directionPoints[1].node_id; 
 	return dirPoints;
+
+}
+
+/**
+* Returns an animated polyline from the last point in the direction point list.
+* @param {L.LatLng} latlng - point to draw the polyline to
+*/
+
+function getAntLineForLastDirPoint(to_latlng){
+
+	try {
+
+		var lastPoint = directionPoints[directionPoints.length -1 ];
+	    var latlngs = [ lastPoint.latlng, to_latlng ];
+
+		var options = {delay: 300, dashArray: [10,20], weight: 5, color: "darkblue", pulseColor: "#FFFFFF"};
+		var path =  L.polyline.antPath(latlngs, options);
+
+		return path;
+
+	} catch (error) {
+		console.log(error);
+	}
 }
