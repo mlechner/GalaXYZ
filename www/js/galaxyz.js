@@ -1,3 +1,5 @@
+var closestID;
+
 
 function sendAjax(){
 	// calls an AJAX query to the file ajax_dbquery
@@ -103,15 +105,11 @@ function getnogo(){
 	console.log(getFromToPoints());
 }
 
-function getClosestNode(x,y){
+function getClosestNode(x,y, callback) {
 	//console.log("in get closest node");
 	ajax_url = "ajax_closestNodes.php?x="+x+"&y="+y;
-	var id;
-	$.ajax({url: ajax_url, success: function(result){
-		//passes result to handleAjax function
-		//console.log("success function");
-		id = result;
-		return id;
-	}});
-	
+	$.ajax({ url: ajax_url, success: function(data, status, xhr){  
+       callback(data);
+     }
+	});
 }
