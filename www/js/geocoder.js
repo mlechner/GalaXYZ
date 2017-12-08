@@ -32,9 +32,12 @@ $(document).ready(function () {
                     //Add List to Geocoder HTML
                     $("#geocoder").append("<datalist id=\"adress\"></datalist>");
                     //Iterate all found Adresses and add to List
-                    for (i = 0; i < suggestions.length; i++) {
-                        var currAdress = JSON.stringify((suggestions[i]['label']));
-                        $("#adress").append("<option value=" + currAdress + "></datalist>");
+                    for (i = 0; (i < suggestions.length)&&(i < 5); i++) {
+                        var currAdress = suggestions[i]['label'];
+                        //Adress without Country information
+                        var adressNoC = currAdress.split(", ");
+                        adressNoC.reverse().pop();
+                        $("#adress").append("<option value=" + adressNoC + "></datalist>");
                     }
                 });
             }
