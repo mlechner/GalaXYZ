@@ -1,70 +1,96 @@
 #menu {
-	position: absolute;
-	right: 0px;
-	top: 80px;
-	z-index: 400;				
+    position: absolute;
+    right: 0px;
+    top: 80px;
+    z-index: 400;
 }
+
 #map {
-	height: 600px;
-	width: 100%;
-	position: relative;
+    height: 600px;
+    width: 100%;
+    position: relative;
 }
+
 #panel {
-	background-color: white;
-	padding: 10px;
-	border-top-left-radius: 5px;
-	border-bottom-left-radius: 5px;	
-	border: 1px solid black;
-	border-right: 0px;
-	display: none;
-	height: 550px;
-	overflow: scroll;
+    background-color: white;
+    padding: 10px;
+    border-top-left-radius: 5px;
+    border-bottom-left-radius: 5px;
+    border: 1px solid black;
+    border-right: 0px;
+    display: none;
+    height: 550px;
+    overflow: scroll;
 }
+
 #btn_panel {
-	color: white; 
-	float: right;
-	background-color: black;
-	opacity: 0.7;
-	border-top-right-radius: 0px;
-	border-bottom-right-radius: 0px;
-	margin-top: 5px;
+    color: white;
+    float: right;
+    background-color: black;
+    opacity: 0.7;
+    border-top-right-radius: 0px;
+    border-bottom-right-radius: 0px;
+    margin-top: 5px;
 }
+
+#geocoder {
+    position: relative;
+    left: 20px;
+    top: -180px;
+    z-index: 400;
+    font-size: small;
+}
+
+#geocButton {
+    position: relative;
+    left: 16px;
+    top: -180px;
+    z-index: 400;
+    font-size: small;
+}
+
 .nogoitem {
-	margin: 10px;
-	border: 1px solid darkgrey;
-	border-radius: 3px;
-	margin-left: 0px;
-	margin-right: 0px;	
-	-webkit-transition: all 1s ease-in-out;
+    margin: 10px;
+    border: 1px solid darkgrey;
+    border-radius: 3px;
+    margin-left: 0px;
+    margin-right: 0px;
+    -webkit-transition: all 1s ease-in-out;
     -moz-transition: all 1s ease-in-out;
     -ms-transition: all 1s ease-in-out;
     -o-transition: all 1s ease-in-out;
     transition: all 1s ease-in-out;
 }
-.objTitle{
-	margin-bottom: 0px; 
-	padding-top: 5px;
-	cursor: pointer;
+
+.objTitle {
+    margin-bottom: 0px;
+    padding-top: 5px;
+    cursor: pointer;
 }
-.objTitle:hover{
-	color:black;
+
+.objTitle:hover {
+    color: black;
 }
-.glyphicon-trash{
-	padding-left: 2px;
+
+.glyphicon-trash {
+    padding-left: 2px;
 }
-.glyphicon-trash:hover{
-	color: #750101;
-	font-size: 1.2em;
-	cursor: pointer;
-	padding-left: 0px;
+
+.glyphicon-trash:hover {
+    color: #750101;
+    font-size: 1.2em;
+    cursor: pointer;
+    padding-left: 0px;
 }
-.glyphicon-ok{
-	padding-left: 2px;
-	display: none;
+
+.glyphicon-ok {
+    padding-left: 2px;
+    display: none;
 }
-.glyphicon-ok:hover{
-	color: #1e7401;
-	font-size: 1.2em;
-	cursor: pointer;
-	padding-left: 0px;
+
+.glyphicon-ok:hover {
+    color: #1e7401;
+    font-size: 1.2em;
+    cursor: pointer;
+    padding-left: 0px;
 }
