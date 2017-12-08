@@ -31,6 +31,7 @@
 		<script type="text/javascript" src="js/toolset.js"></script>
 		<script type="text/javascript" src="js/routing.js"></script>
 		<script type="text/javascript" src="js/galaxyz.js"></script>
+		<script type="text/javascript" src="js/geocoder.js"></script>
 		
 		
 		<!--- style created in lib/stylesheet -->
@@ -51,6 +52,8 @@
 		<div id="map-container" class="row">
 			<!-- Div occupied by map -->
 			<div id='map' style=""></div>
+			<!-- geocoder html -->
+        	<input type="search" id="geocoder" cols="30" value="Adress Search" ></input>
 			<!-- menu html -->
 			<div id="menu">
 				<div id="panel" style="float: right; width: 300px;">
