@@ -53,7 +53,7 @@
 			<!-- Div occupied by map -->
 			<div id='map' style=""></div>
 			<!-- geocoder html -->
-			<input type="search" id="geocoder" list="adress" cols="50" value="Adress Search" ></input>
+			<input type="search" id="geocoder" list="address" cols="50" value="Address Search" ></input>
 			<button type="button" id="geocButton">GO</button>
 			<!-- menu html -->
 			<div id="menu">

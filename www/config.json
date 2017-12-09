@@ -1,14 +1,16 @@
 {
-"db_host": "localhost",
-"db_port": 5432,
-"db_name": "nogo_dijkstra",
-"db_schema": "public",
-"db_user": "postgres",
-"db_pwd": "12345",
-"geo_srid":4326,
-"geo_bbox": 
-	[8.29539476408,
-	49.0464002604,
-	8.50387130644,
-	48.9734287523]
+  "db_host": "localhost",
+  "db_port": 5432,
+  "db_name": "nogo_dijkstra",
+  "db_schema": "public",
+  "db_user": "postgres",
+  "db_pwd": "12345",
+  "geo_srid": 4326,
+  "geo_bbox": [
+    8.29539476408,
+    49.0464002604,
+    8.50387130644,
+    48.9734287523
+  ],
+  "searchDistance_geocoder": 10000
 }
