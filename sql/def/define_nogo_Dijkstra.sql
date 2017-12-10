@@ -46,7 +46,7 @@
 	$$
 	LANGUAGE SQL;
 
-/*SELECT * FROM pgr_nogo_Dijkstra(
+SELECT * FROM pgr_nogo_Dijkstra(
 	'ways',
 	'gid',
 	'source',
@@ -69,4 +69,4 @@
 	51982,
 	5656,
 	FALSE
-);*/
+);

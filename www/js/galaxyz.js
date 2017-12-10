@@ -140,5 +140,5 @@ function nogoDijkstra(){
 function handle_nogo(result){
 	//console.log(nogo_Poly);
 	//console.log("result: ");
-	console.log(JSON.parse(result));
+	console.log(result);
 }
