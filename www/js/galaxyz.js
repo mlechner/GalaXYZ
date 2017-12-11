@@ -1,6 +1,7 @@
 var closestID;
 
 
+
 function sendAjax(){
 	// calls an AJAX query to the file ajax_dbquery
 	$.ajax({url: "ajax_dbquery.php", success: function(result){
@@ -60,8 +61,11 @@ function panel_addNogo(leaflet_id){
 	$("#managenogo").prepend(addPoly);
 }
 
-
-
+/**
+* Removes the nogo item from the panel given the leaflet id
+* 
+* @param {number} leaflet_id  -  leaflet id of the nogo area
+*/
 function panel_delNogo(leaflet_id){
 	//removes html element from the nogo list				
 	$('#nogoitem'+leaflet_id).remove();
@@ -78,7 +82,7 @@ function toggleSave(ind,leaflet_id){
 }
 //saves the description entered in the panel
 function saveDesc(leaflet_id){	
-	desc = $('#desc'+leaflet_id).val();
+	desc = $('#desc'+leaflet_id).val(); //get the text description
 	toggleSave(1,leaflet_id);
 	//changes from input element to <p> element with the same value
 	$('#desc'+leaflet_id).replaceWith('<p id="desc'+leaflet_id+'" onclick="editDesc('+leaflet_id+')">'+desc+'</p>');
@@ -90,26 +94,52 @@ function saveDesc(leaflet_id){
 	nogo_Poly[index]['desc'] = desc;
 	console.log(nogo_Poly[index]);
 }
+// allows for editing of a NoGo polygon's description
 function editDesc(leaflet_id){
-	desc = $('#desc'+leaflet_id).html();
+	desc = $('#desc'+leaflet_id).html(); // get current desc
+	//html to replace old html
 	html = '<input id="desc'+leaflet_id+'" type="text" class="form-control" placeholder="Add description"\
 			style="margin-bottom: 5px;" onfocus="toggleSave(0,'+leaflet_id+')" value="'+desc+'"></input>';
 	$('#desc'+leaflet_id).replaceWith(html);
 }
-//fetches all of the feature data
-function getnogo(){
-	//calls function to return all the features
-	//console.log(getAllNogoAreas().polygon);
-	//print nogo_Poly array
-	//console.log(nogo_Poly);
-	console.log(getFromToPoints());
+//calls an ajax function which returns the id of the
+//closest node to the point clicked on the map
+function getClosestNode(x,y, callback) {
+	ajax_url = "ajax_closestNodes.php?x="+x+"&y="+y;
+	$.ajax({ url: ajax_url, 
+		success: function(data, status, xhr){  
+       		callback(data);
+     	}
+	});
+}
+//executes the ajax function to generate the route
+function nogoDijkstra(){
+	$('#NoGoLoader').show(); //show the loader
+	var nogos = getAllNogoAreas().polygon; //get all nogo areas
+	try{
+		mks = getFromToPoints(); //get start/end nodes
+	} catch(err) {
+		//start/end points have not been selected
+		alert("Please select your start and end  points");
+		return;
+	}
+	//calls the ajax_nogoDijkstra function
+	//which executes a query using the nogoDijkstra
+	//function, and returns the edges and corresponding data
+	$.ajax({url: "ajax_nogoDijkstra.php", 
+		type: "POST",
+		data: {data: JSON.stringify(nogo_Poly), 
+			from: mks.from,
+			to: mks.to },
+		success: function(result){
+		//passes result to handle_nogo function
+		handle_nogo(result);}
+	});
 }
 
-function getClosestNode(x,y, callback) {
-	//console.log("in get closest node");
-	ajax_url = "ajax_closestNodes.php?x="+x+"&y="+y;
-	$.ajax({ url: ajax_url, success: function(data, status, xhr){  
-       callback(data);
-     }
-	});
+function handle_nogo(result){	
+	$('#NoGoLoader').hide(); //hide the loader
+	route = JSON.parse(result); //set result to the 'route' variable
+	console.log(route);
+
 }

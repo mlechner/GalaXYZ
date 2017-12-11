@@ -383,6 +383,9 @@ function removeNogoPoly(leaflet_id) {
     // Remove from the map (via the nogoAreas feature group)
     nogoAreas.removeLayer(leaflet_id);
 
+    // Remove from panel
+    panel_delNogo(leaflet_id);
+
     return true;
 
   }
