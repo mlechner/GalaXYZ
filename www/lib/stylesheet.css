@@ -35,16 +35,19 @@
 
 #geocoder {
     position: relative;
-    left: 20px;
-    top: -180px;
+    left: 18px;
+    top: -595px;
+    width: 300px;
+    padding: 3px;
     z-index: 400;
     font-size: small;
 }
 
 #geocButton {
     position: relative;
-    left: 16px;
-    top: -180px;
+    left: 15px;
+    top: -595px;
+    padding: 3px;
     z-index: 400;
     font-size: small;
 }
