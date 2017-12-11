@@ -1,3 +1,5 @@
+var closestID;
+
 
 
 function sendAjax(){
@@ -139,4 +141,5 @@ function handle_nogo(result){
 	$('#NoGoLoader').hide(); //hide the loader
 	route = JSON.parse(result); //set result to the 'route' variable
 	console.log(route);
+
 }

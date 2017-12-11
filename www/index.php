@@ -31,6 +31,7 @@
 		<script type="text/javascript" src="js/toolset.js"></script>
 		<script type="text/javascript" src="js/routing.js"></script>
 		<script type="text/javascript" src="js/galaxyz.js"></script>
+		<script type="text/javascript" src="js/geocoder.js"></script>
 		
 		
 		<!--- style created in lib/stylesheet -->
@@ -51,6 +52,9 @@
 		<div id="map-container" class="row">
 			<!-- Div occupied by map -->
 			<div id='map' style=""></div>
+			<!-- geocoder html -->
+			<input type="search" id="geocoder" list="address" cols="50" value="Address Search" ></input>
+			<button type="button" id="geocButton">GO</button>
 			<!-- menu html -->
 			<div id="menu">
 				<div id="panel" style="float: right; width: 300px;">
@@ -82,6 +86,8 @@
 			registerDrawEvents(); // At the draw.events.js file
 
 			var route;
+
+
 
 
 
