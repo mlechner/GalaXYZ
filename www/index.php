@@ -54,15 +54,14 @@
 			<!-- menu html -->
 			<div id="menu">
 				<div id="panel" style="float: right; width: 300px;">
-					<h2 style="margin-top: 0px; border-bottom: 1px solid lightgrey">Connect to DB</h2>
-					<button type="button" class="btn btn-default" onclick="sendAjax()">Click Me!</button>
-					<br><br><p>*open console (F12)</p>
-					<p>This button executes a SQL query, returning geometry of a polygon</p>
-					<div style="border-bottom: 1px solid lightgrey;"></div>
-					<button type="button" style="margin-top: 5px;" class="btn btn-default" onclick="nogoDijkstra()">get nogo</button>
+					<h2 style="margin-top: 0px; border-bottom: 1px solid lightgrey">NoGo Areas</h2>	
+					<div class="row">				
+						<button type="button" style="margin-top: 5px; margin-left: 15px; float: left;" id="NoGoButton" class="btn btn-primary" onclick="nogoDijkstra()">Calculate Route</button>
+						<div class="loader" id="NoGoLoader"></div>
+					</div>
 					<div id="managenogo">
 						<!--populated by javascript -->						
-					</div>
+					</div>	
 				</div>
 				<button id="btn_panel" type="button" class="btn btn-default" onclick="panelDisplay()">
 					<span class = "glyphicon glyphicon-menu-hamburger"></span>
@@ -81,6 +80,8 @@
 			initmap(); // initialises the leaflet map from leafletembed.js
 			addAllMapPlugins(); // At the map.plugins.js file
 			registerDrawEvents(); // At the draw.events.js file
+
+			var route;
 
 
 
