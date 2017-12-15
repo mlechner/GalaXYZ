@@ -1,5 +1,5 @@
 ﻿/* ========================================================================= */
-/* ===== 1 TO 1 ============================================================ */
+/* ===== DIJKSTRA 1 TO 1 DEFINITION ======================================== */
 /* ========================================================================= */
 
 CREATE OR REPLACE FUNCTION pgr_nogo_dijkstra(
@@ -76,7 +76,7 @@ $$
 LANGUAGE plpgsql;
 
 /* ========================================================================= */
-/* ===== 1 TO N ============================================================ */
+/* ===== DIJKSTRA 1 TO N DEFINITION ======================================== */
 /* ========================================================================= */
 
 CREATE OR REPLACE FUNCTION pgr_nogo_dijkstra(
@@ -154,7 +154,7 @@ $$
 LANGUAGE plpgsql;
 
 /* ========================================================================= */
-/* ===== N TO 1 ============================================================ */
+/* ===== DIJKSTRA N TO 1 DEFINITION ======================================== */
 /* ========================================================================= */
 
 CREATE OR REPLACE FUNCTION pgr_nogo_dijkstra(
@@ -232,7 +232,7 @@ $$
 LANGUAGE plpgsql;
 
 /* ========================================================================= */
-/* ===== N TO M ============================================================ */
+/* ===== DIJKSTRA N TO M DEFINITION========================================= */
 /* ========================================================================= */
 
 CREATE OR REPLACE FUNCTION pgr_nogo_dijkstra(
@@ -311,49 +311,61 @@ $$
 LANGUAGE plpgsql;
 
 /* ========================================================================= */
-/* ===== 1 TO 1 TEST ======================================================= */
+/* ===== DIJKSTRA 1 TO 1 TEST ============================================== */
 /* ========================================================================= */
 
-SELECT
-	*
-FROM
-	pgr_nogo_dijkstra(
-		'SELECT gid AS id, source, target, cost, reverse_cost, the_geom AS geom FROM ways',
-		(SELECT ST_Union(geom) FROM overwrite_poly),
-		1,
-		2,
-		TRUE
-	);
+-- SELECT
+-- 	*
+-- FROM
+-- 	pgr_nogo_dijkstra(
+-- 		'SELECT gid AS id, source, target, cost, reverse_cost, the_geom AS geom FROM ways',
+-- 		(SELECT ST_Union(geom) FROM overwrite_poly),
+-- 		1,
+-- 		2,
+-- 		TRUE
+-- 	);
 
-SELECT
-	*
-FROM
-	pgr_nogo_dijkstra(
-		'SELECT gid AS id, source, target, cost, reverse_cost, the_geom AS geom FROM ways',
-		(SELECT ST_Union(geom) FROM overwrite_poly),
-		1,
-		ARRAY[2,3],
-		TRUE
-	);
+/* ========================================================================= */
+/* ===== DIJKSTRA 1 TO N TEST ============================================== */
+/* ========================================================================= */
 
-SELECT
-	*
-FROM
-	pgr_nogo_dijkstra(
-		'SELECT gid AS id, source, target, cost, reverse_cost, the_geom AS geom FROM ways',
-		(SELECT ST_Union(geom) FROM overwrite_poly),
-		ARRAY[1,2],
-		3,
-		TRUE
-	);
+-- SELECT
+-- 	*
+-- FROM
+-- 	pgr_nogo_dijkstra(
+-- 		'SELECT gid AS id, source, target, cost, reverse_cost, the_geom AS geom FROM ways',
+-- 		(SELECT ST_Union(geom) FROM overwrite_poly),
+-- 		1,
+-- 		ARRAY[2,3],
+-- 		TRUE
+-- 	);
+	
+/* ========================================================================= */
+/* ===== DIJKSTRA N TO 1 TEST ============================================== */
+/* ========================================================================= */
 
-SELECT
-	*
-FROM
-	pgr_nogo_dijkstra(
-		'SELECT gid AS id, source, target, cost, reverse_cost, the_geom AS geom FROM ways',
-		(SELECT ST_Union(geom) FROM overwrite_poly),
-		ARRAY[1,2],
-		ARRAY[3,2],
-		TRUE
-	);
+-- SELECT
+-- 	*
+-- FROM
+-- 	pgr_nogo_dijkstra(
+-- 		'SELECT gid AS id, source, target, cost, reverse_cost, the_geom AS geom FROM ways',
+-- 		(SELECT ST_Union(geom) FROM overwrite_poly),
+-- 		ARRAY[1,2],
+-- 		3,
+-- 		TRUE
+-- 	);
+
+/* ========================================================================= */
+/* ===== DIJKSTRA N TO M TEST ============================================== */
+/* ========================================================================= */
+
+-- SELECT
+-- 	*
+-- FROM
+-- 	pgr_nogo_dijkstra(
+-- 		'SELECT gid AS id, source, target, cost, reverse_cost, the_geom AS geom FROM ways',
+-- 		(SELECT ST_Union(geom) FROM overwrite_poly),
+-- 		ARRAY[1,2],
+-- 		ARRAY[3,2],
+-- 		TRUE
+-- 	);
