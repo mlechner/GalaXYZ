@@ -136,7 +136,6 @@ function renderDirectionPoint(node_id, point){
 */
 function findRoute(from_node_id, to_node_id){
 
-	nogoDijkstra();
 	console.log("%cFinding route..................................", "background: green; color: white; font-size: large");
 	console.log("From node ID: " + from_node_id + " ;\nTo node ID: ", to_node_id);
 

@@ -26,14 +26,6 @@ function addAllMapPlugins(){
 		drawControl = getDrawControlPlugin(nogoAreas);
 		map.addControl(drawControl);
 
-		//Hide initial Zoom Control, default position 'topleft'
-        $(".leaflet-control-zoom").css("visibility", "hidden");
-
-        //Add Zoom Control at prefered position 'topleft' 'topright' 'bottomleft' 'bottomrigth' possible
-        L.control.zoom({
-            position:'bottomleft'
-        }).addTo(map);
-
 		initRouting();
 
 	} else{
