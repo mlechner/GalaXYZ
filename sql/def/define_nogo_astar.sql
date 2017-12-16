@@ -1,13 +1,16 @@
 ﻿/* ========================================================================= */
-/* ===== DIJKSTRA 1 TO 1 DEFINITION ======================================== */
+/* ===== A* 1 TO 1 DEFINITION ============================================== */
 /* ========================================================================= */
 
-CREATE OR REPLACE FUNCTION pgr_nogo_dijkstra(
+CREATE OR REPLACE FUNCTION pgr_nogo_astar(
 	edges_sql TEXT,
 	nogo_geom GEOMETRY,
 	start_vid BIGINT,
 	end_vid BIGINT,
-	directed BOOLEAN,
+	directed BOOLEAN DEFAULT TRUE,
+	heuristic INTEGER DEFAULT 5,
+	factor FLOAT DEFAULT 1.0,
+	epsilon FLOAT DEFAULT 1.0,
 
 	OUT seq integer,
 	OUT path_seq integer,
@@ -37,7 +40,11 @@ AS (
 		edges_table.source AS source,
 		edges_table.target AS target,
 		edges_table.cost AS cost,
-		edges_table.reverse_cost AS reverse_cost
+		edges_table.reverse_cost AS reverse_cost,
+		edges_table.x1 AS x1,
+		edges_table.y1 AS y1,
+		edges_table.x2 AS x2,
+		edges_table.y2 AS y2
 	FROM
 		edges_table
 	WHERE
@@ -50,7 +57,11 @@ AS (
 		edges_table.source AS source,
 		edges_table.target AS target,
 		'INFINITY' AS cost,
-		'INFINITY' AS reverse_cost
+		'INFINITY' AS reverse_cost,
+		edges_table.x1 AS x1,
+		edges_table.y1 AS y1,
+		edges_table.x2 AS x2,
+		edges_table.y2 AS y2
 	FROM
 		edges_table
 	WHERE
@@ -63,11 +74,14 @@ RETURN QUERY (
 	SELECT
 		* 
 	FROM
-		pgr_dijkstra(
-			'SELECT id, source, target, cost, reverse_cost FROM edges_table_nogo;',
+		pgr_astar(
+			'SELECT id, source, target, cost, reverse_cost, x1, y1, x2, y2 FROM edges_table_nogo;',
 			start_vid,
 			end_vid,
-			directed
+			directed,
+			heuristic,
+			factor,
+			epsilon
 		)
 );
 
@@ -76,15 +90,18 @@ $$
 LANGUAGE plpgsql;
 
 /* ========================================================================= */
-/* ===== DIJKSTRA 1 TO N DEFINITION ======================================== */
+/* ===== A* 1 TO N DEFINITION ============================================== */
 /* ========================================================================= */
 
-CREATE OR REPLACE FUNCTION pgr_nogo_dijkstra(
+CREATE OR REPLACE FUNCTION pgr_nogo_astar(
 	edges_sql TEXT,
 	nogo_geom GEOMETRY,
 	start_vid BIGINT,
 	end_vids ANYARRAY,
-	directed BOOLEAN,
+	directed BOOLEAN DEFAULT TRUE,
+	heuristic INTEGER DEFAULT 5,
+	factor FLOAT DEFAULT 1.0,
+	epsilon FLOAT DEFAULT 1.0,
 
 	OUT seq integer,
 	OUT path_seq integer,
@@ -115,7 +132,11 @@ AS (
 		edges_table.source AS source,
 		edges_table.target AS target,
 		edges_table.cost AS cost,
-		edges_table.reverse_cost AS reverse_cost
+		edges_table.reverse_cost AS reverse_cost,
+		edges_table.x1 AS x1,
+		edges_table.y1 AS y1,
+		edges_table.x2 AS x2,
+		edges_table.y2 AS y2
 	FROM
 		edges_table
 	WHERE
@@ -128,7 +149,11 @@ AS (
 		edges_table.source AS source,
 		edges_table.target AS target,
 		'INFINITY' AS cost,
-		'INFINITY' AS reverse_cost
+		'INFINITY' AS reverse_cost,
+		edges_table.x1 AS x1,
+		edges_table.y1 AS y1,
+		edges_table.x2 AS x2,
+		edges_table.y2 AS y2
 	FROM
 		edges_table
 	WHERE
@@ -141,11 +166,14 @@ RETURN QUERY (
 	SELECT
 		* 
 	FROM
-		pgr_dijkstra(
-			'SELECT id, source, target, cost, reverse_cost FROM edges_table_nogo;',
+		pgr_astar(
+			'SELECT id, source, target, cost, reverse_cost, x1, y1, x2, y2 FROM edges_table_nogo;',
 			start_vid,
 			end_vids,
-			directed
+			directed,
+			heuristic,
+			factor,
+			epsilon
 		)
 );
 
@@ -154,15 +182,18 @@ $$
 LANGUAGE plpgsql;
 
 /* ========================================================================= */
-/* ===== DIJKSTRA N TO 1 DEFINITION ======================================== */
+/* ===== A* N TO 1 DEFINITION ============================================== */
 /* ========================================================================= */
 
-CREATE OR REPLACE FUNCTION pgr_nogo_dijkstra(
+CREATE OR REPLACE FUNCTION pgr_nogo_astar(
 	edges_sql TEXT,
 	nogo_geom GEOMETRY,
 	start_vids ANYARRAY,
 	end_vid BIGINT,
-	directed BOOLEAN,
+	directed BOOLEAN DEFAULT TRUE,
+	heuristic INTEGER DEFAULT 5,
+	factor FLOAT DEFAULT 1.0,
+	epsilon FLOAT DEFAULT 1.0,
 
 	OUT seq integer,
 	OUT path_seq integer,
@@ -193,7 +224,11 @@ AS (
 		edges_table.source AS source,
 		edges_table.target AS target,
 		edges_table.cost AS cost,
-		edges_table.reverse_cost AS reverse_cost
+		edges_table.reverse_cost AS reverse_cost,
+		edges_table.x1 AS x1,
+		edges_table.y1 AS y1,
+		edges_table.x2 AS x2,
+		edges_table.y2 AS y2
 	FROM
 		edges_table
 	WHERE
@@ -206,7 +241,11 @@ AS (
 		edges_table.source AS source,
 		edges_table.target AS target,
 		'INFINITY' AS cost,
-		'INFINITY' AS reverse_cost
+		'INFINITY' AS reverse_cost,
+		edges_table.x1 AS x1,
+		edges_table.y1 AS y1,
+		edges_table.x2 AS x2,
+		edges_table.y2 AS y2
 	FROM
 		edges_table
 	WHERE
@@ -219,11 +258,14 @@ RETURN QUERY (
 	SELECT
 		* 
 	FROM
-		pgr_dijkstra(
-			'SELECT id, source, target, cost, reverse_cost FROM edges_table_nogo;',
+		pgr_astar(
+			'SELECT id, source, target, cost, reverse_cost, x1, y1, x2, y2 FROM edges_table_nogo;',
 			start_vids,
 			end_vid,
-			directed
+			directed,
+			heuristic,
+			factor,
+			epsilon
 		)
 );
 
@@ -232,15 +274,18 @@ $$
 LANGUAGE plpgsql;
 
 /* ========================================================================= */
-/* ===== DIJKSTRA N TO M DEFINITION========================================= */
+/* ===== A* N TO M DEFINITION ============================================== */
 /* ========================================================================= */
 
-CREATE OR REPLACE FUNCTION pgr_nogo_dijkstra(
+CREATE OR REPLACE FUNCTION pgr_nogo_astar(
 	edges_sql TEXT,
 	nogo_geom GEOMETRY,
 	start_vids ANYARRAY,
 	end_vids ANYARRAY,
-	directed BOOLEAN,
+	directed BOOLEAN DEFAULT TRUE,
+	heuristic INTEGER DEFAULT 5,
+	factor FLOAT DEFAULT 1.0,
+	epsilon FLOAT DEFAULT 1.0,
 
 	OUT seq integer,
 	OUT path_seq integer,
@@ -272,7 +317,11 @@ AS (
 		edges_table.source AS source,
 		edges_table.target AS target,
 		edges_table.cost AS cost,
-		edges_table.reverse_cost AS reverse_cost
+		edges_table.reverse_cost AS reverse_cost,
+		edges_table.x1 AS x1,
+		edges_table.y1 AS y1,
+		edges_table.x2 AS x2,
+		edges_table.y2 AS y2
 	FROM
 		edges_table
 	WHERE
@@ -285,7 +334,11 @@ AS (
 		edges_table.source AS source,
 		edges_table.target AS target,
 		'INFINITY' AS cost,
-		'INFINITY' AS reverse_cost
+		'INFINITY' AS reverse_cost,
+		edges_table.x1 AS x1,
+		edges_table.y1 AS y1,
+		edges_table.x2 AS x2,
+		edges_table.y2 AS y2
 	FROM
 		edges_table
 	WHERE
@@ -298,11 +351,14 @@ RETURN QUERY (
 	SELECT
 		* 
 	FROM
-		pgr_dijkstra(
-			'SELECT id, source, target, cost, reverse_cost FROM edges_table_nogo;',
+		pgr_astar(
+			'SELECT id, source, target, cost, reverse_cost, x1, y1, x2, y2 FROM edges_table_nogo;',
 			start_vids,
 			end_vids,
-			directed
+			directed,
+			heuristic,
+			factor,
+			epsilon
 		)
 );
 
@@ -311,33 +367,39 @@ $$
 LANGUAGE plpgsql;
 
 /* ========================================================================= */
-/* ===== DIJKSTRA 1 TO 1 TEST ============================================== */
+/* ===== A* 1 TO 1 TEST ==================================================== */
 /* ========================================================================= */
 
 -- SELECT
 -- 	*
 -- FROM
--- 	pgr_nogo_dijkstra(
--- 		'SELECT gid AS id, source, target, cost, reverse_cost, the_geom AS geom FROM ways',
+-- 	pgr_nogo_astar(
+-- 		'SELECT gid AS id, source, target, cost, reverse_cost, x1, y1, x2, y2, the_geom AS geom FROM ways',
 -- 		(SELECT ST_Union(geom) FROM overwrite_poly),
 -- 		1,
 -- 		2,
--- 		TRUE
+-- 		TRUE,
+-- 		5,
+-- 		1.0,
+-- 		1.0
 -- 	);
 
 /* ========================================================================= */
-/* ===== DIJKSTRA 1 TO N TEST ============================================== */
+/* ===== A* 1 TO N TEST ==================================================== */
 /* ========================================================================= */
 
 -- SELECT
 -- 	*
 -- FROM
--- 	pgr_nogo_dijkstra(
--- 		'SELECT gid AS id, source, target, cost, reverse_cost, the_geom AS geom FROM ways',
+-- 	pgr_nogo_astar(
+-- 		'SELECT gid AS id, source, target, cost, reverse_cost, x1, y1, x2, y2, the_geom AS geom FROM ways',
 -- 		(SELECT ST_Union(geom) FROM overwrite_poly),
 -- 		1,
 -- 		ARRAY[2,3],
--- 		TRUE
+-- 		TRUE,
+-- 		5,
+-- 		1.0,
+-- 		1.0
 -- 	);
 	
 /* ========================================================================= */
@@ -347,12 +409,15 @@ LANGUAGE plpgsql;
 -- SELECT
 -- 	*
 -- FROM
--- 	pgr_nogo_dijkstra(
--- 		'SELECT gid AS id, source, target, cost, reverse_cost, the_geom AS geom FROM ways',
+-- 	pgr_nogo_astar(
+-- 		'SELECT gid AS id, source, target, cost, reverse_cost, x1, y1, x2, y2, the_geom AS geom FROM ways',
 -- 		(SELECT ST_Union(geom) FROM overwrite_poly),
 -- 		ARRAY[1,2],
 -- 		3,
--- 		TRUE
+-- 		TRUE,
+-- 		5,
+-- 		1.0,
+-- 		1.0
 -- 	);
 
 /* ========================================================================= */
@@ -362,10 +427,13 @@ LANGUAGE plpgsql;
 -- SELECT
 -- 	*
 -- FROM
--- 	pgr_nogo_dijkstra(
--- 		'SELECT gid AS id, source, target, cost, reverse_cost, the_geom AS geom FROM ways',
+-- 	pgr_nogo_astar(
+-- 		'SELECT gid AS id, source, target, cost, reverse_cost, x1, y1, x2, y2, the_geom AS geom FROM ways',
 -- 		(SELECT ST_Union(geom) FROM overwrite_poly),
 -- 		ARRAY[1,2],
--- 		ARRAY[3,2],
--- 		TRUE
+-- 		ARRAY[3,4],
+-- 		TRUE,
+-- 		5,
+-- 		1.0,
+-- 		1.0
 -- 	);
