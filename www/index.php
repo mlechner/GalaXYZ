@@ -31,6 +31,7 @@
 		<script type="text/javascript" src="js/toolset.js"></script>
 		<script type="text/javascript" src="js/routing.js"></script>
 		<script type="text/javascript" src="js/galaxyz.js"></script>
+		<script type="text/javascript" src="js/geocoder.js"></script>
 		
 		
 		<!--- style created in lib/stylesheet -->
@@ -51,18 +52,29 @@
 		<div id="map-container" class="row">
 			<!-- Div occupied by map -->
 			<div id='map' style=""></div>
+			<!-- geocoder html -->
+			<div class="row">
+				<input type="search" class="form-control col-sm-4" style="margin-left: 15px;" id="geocoder" list="address" cols="50" value="Address Search" ></input>
+				<button type="button" id="geocButton" style="margin-left: 5px; padding: 6px;" class="btn btn-default">GO</button>
+			</div>
 			<!-- menu html -->
 			<div id="menu">
 				<div id="panel" style="float: right; width: 300px;">
-					<h2 style="margin-top: 0px; border-bottom: 1px solid lightgrey">Connect to DB</h2>
-					<button type="button" class="btn btn-default" onclick="sendAjax()">Click Me!</button>
-					<br><br><p>*open console (F12)</p>
-					<p>This button executes a SQL query, returning geometry of a polygon</p>
-					<div style="border-bottom: 1px solid lightgrey;"></div>
-					<button type="button" style="margin-top: 5px;" class="btn btn-default" onclick="nogoDijkstra()">get nogo</button>
+					<h2 style="margin-top: 0px; border-bottom: 1px solid lightgrey">NoGo Areas</h2>	
+					<!--<div class="row">				
+						<button type="button" style="margin-top: 5px; margin-left: 15px; float: left;" id="NoGoButton" class="btn btn-primary" onclick="nogoDijkstra()">Calculate Route</button>
+						<div class="loader" id="NoGoLoader"></div>
+					</div>-->	
+						
+						<label class="fileContainer btn btn-primary">Upload shapefile
+							<input type="file" name="files[]" id="fileInput" name="fileInput" onchange="upload()" data-multiple-caption="{count} files selected" multiple />
+						</label>
+						<!--<button style="margin-left: 10px;" type="button" class="btn btn-default" onclick="upload()" >Upload</button>	-->
+								
+						
 					<div id="managenogo">
 						<!--populated by javascript -->						
-					</div>
+					</div>	
 				</div>
 				<button id="btn_panel" type="button" class="btn btn-default" onclick="panelDisplay()">
 					<span class = "glyphicon glyphicon-menu-hamburger"></span>
@@ -76,11 +88,15 @@
 
 			var closestNodeID;
 
-			var panelDisp = 0; // indicator for panel displayed
+			var panelDisp = 1; // indicator for panel displayed
 			var nogoCount = 0; // count of nogo areas for panel display
 			initmap(); // initialises the leaflet map from leafletembed.js
 			addAllMapPlugins(); // At the map.plugins.js file
 			registerDrawEvents(); // At the draw.events.js file
+
+			var route;
+
+
 
 
 
