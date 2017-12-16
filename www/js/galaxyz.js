@@ -105,7 +105,7 @@ function editDesc(leaflet_id){
 //calls an ajax function which returns the id of the
 //closest node to the point clicked on the map
 function getClosestNode(x,y, callback) {
-	ajax_url = "ajax_closestNodes.php?x="+x+"&y="+y;
+	ajax_url = "php/ajax_closestNodes.php?x="+x+"&y="+y;
 	$.ajax({ url: ajax_url, 
 		success: function(data, status, xhr){  
        		callback(data);
@@ -126,7 +126,7 @@ function nogoDijkstra(){
 	//calls the ajax_nogoDijkstra function
 	//which executes a query using the nogoDijkstra
 	//function, and returns the edges and corresponding data
-	$.ajax({url: "ajax_nogoDijkstra.php", 
+	$.ajax({url: "php/ajax_nogoDijkstra.php", 
 		type: "POST",
 		data: {data: JSON.stringify(nogo_Poly), 
 			from: mks.from,
@@ -141,5 +141,57 @@ function handle_nogo(result){
 	$('#NoGoLoader').hide(); //hide the loader
 	route = JSON.parse(result); //set result to the 'route' variable
 	console.log(route);
-
+	L.geoJSON(route).addTo(map);
 }
+
+/* 
+* upload shapefile
+*/
+
+function upload(){
+
+    var form_data = new FormData();
+	for (var i = 0, len = document.getElementById('fileInput').files.length; i < len; i++) {
+        form_data.append("file" + i, document.getElementById('fileInput').files[i]);
+    }
+
+    
+   	$.ajax({
+		url: "php/upload.php", // Url to which the request is send
+		type: "POST",             // Type of request to be send, called as method
+		data: form_data, // Data sent to server, a set of key/value pairs (i.e. form fields and values)
+		contentType: false,       // The content type used when sending data to the server.
+		cache: false,             // To unable request pages to be cached
+		processData:false,        // To send DOMDocument or non processed data file it is set to false
+		success: function(result){
+			//shp2json(result);
+			if (result){
+				console.log("yes");
+				shp2json();
+			} else {
+				alert("Please select all associated files as well (.dbf .shx etc),\n"+
+				"or a zip file containing these files");
+			}
+			//console.log(result);
+		}
+	});
+}
+function shp2json(){
+	//console.log(name);
+	//console.log(ajax_url);
+	console.log("shp2json");
+	$.ajax({
+		url: 'php/shp2json.php',
+		dataType: 'json',
+		success: function(result){
+			//console.log(JSON.parse(result));
+			var shp = JSON.parse(result)
+			console.log(shp);
+			
+			L.geoJSON(shp).addTo(map);
+		}
+	});
+}
+
+
+
