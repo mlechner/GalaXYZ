@@ -43,30 +43,24 @@ $(document).ready(function () {
 
                         //Iterate all found Addresses
                         for (i = 0; (i < suggestions.length); i++) {
-                            console.log(suggestions);
                             // if ~ in bbox, within searchdistance -> map_view setting just preference
                             if (suggestions[i]['distance'] < searchDistance) {
                                 var currAddress = suggestions[i]['address'];
                                 var matchLevel = suggestions[i]['matchLevel'];
                                 if (matchLevel == "county") {
                                     var adressAppend = currAddress['county'] + ", " + currAddress['state'];
-                                    console.log(matchLevel);
                                 }
                                 if (matchLevel == "city") {
                                     var adressAppend = currAddress['city'] + ", " + currAddress['state'];
-                                    console.log(matchLevel);
                                 }
                                 if (matchLevel == "district") {
                                     var adressAppend = currAddress['district'] + ", " + currAddress['city'];
-                                    console.log(matchLevel);
                                 }
                                 if (matchLevel == "street") {
                                     var adressAppend = currAddress['street'] + ", " + currAddress['district'] + ", " + currAddress['city'];
-                                    console.log(matchLevel);
                                 }
                                 if (matchLevel == "houseNumber") {
                                     var adressAppend = currAddress['street'] + ", " + currAddress['houseNumber'] + ", " + currAddress['city'];
-                                    console.log(matchLevel);
                                 }
                                 //no Dublicates e.g. different postal Code, other same
                                 if (adressAppend != oldAdress) {
