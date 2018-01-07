@@ -13,16 +13,16 @@ For the webpage to function correctly, the following needs to be installed:
 * php7.0-XML
 * php pgsql
 
-'''sh
+```sh
 sudo apt-get update
-'''
+```
 
-'''sh
+```sh
 sudo apt-get install apache2 php7.0 libapache2-mod-php7.0 php7.0-xml php-zip php7.0-pgsql
-'''
+```
 
 Once the repository has been cloned, a folder called 'upload' must be created within the /www/php directory. Read and write permission must be given to this folder to allow php to uplaod and read uploaded files. This can be done with the following command:
 
-'''sh
+```sh
 sudo chmod 777 -R /path/to/upload
-'''
+```
