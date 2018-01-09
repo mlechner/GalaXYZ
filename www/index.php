@@ -65,12 +65,19 @@
 						<button type="button" style="margin-top: 5px; margin-left: 15px; float: left;" id="NoGoButton" class="btn btn-primary" onclick="nogoDijkstra()">Calculate Route</button>
 						<div class="loader" id="NoGoLoader"></div>
 					</div>-->	
-						
-						<label class="fileContainer btn btn-primary">Upload shapefile
-							<input type="file" name="files[]" id="fileInput" name="fileInput" onchange="upload()" data-multiple-caption="{count} files selected" multiple />
-						</label>
-						<!--<button style="margin-left: 10px;" type="button" class="btn btn-default" onclick="upload()" >Upload</button>	-->
-								
+					<div class="row" style="padding-left: 15px;">
+						<div style="float: left;">
+							<label class="fileContainer btn btn-primary" 
+							data-toggle="tooltip" title=".json, shapefile.zip, shp collection">Upload
+								<input type="file" name="files[]" id="fileInput" name="fileInput" 
+								onchange="upload()"	data-multiple-caption="{count} files selected" multiple />
+							</label>
+						</div>
+						<div style="float: left; margin-left: 5px;">
+							<button class="btn btn-primary" data-toggle="tooltip" title="downloads json file" onclick="downloadJson()">Download</button>
+							<div id="downloadContainer" style="display: none;"><!-- hidden for download --></div>
+						</div>
+					</div>
 						
 					<div id="managenogo">
 						<!--populated by javascript -->						
@@ -95,11 +102,6 @@
 			registerDrawEvents(); // At the draw.events.js file
 
 			var route;
-
-
-
-
-
 
 		</script>
 

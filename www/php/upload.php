@@ -25,6 +25,7 @@
 	$shx = 0;
 	$dbf = 0;
 	$zip = 0;
+	$json = 0;
 	$name = "";
 
 	//Loop through all the files passed by AJAX
@@ -42,6 +43,10 @@
 			if(zip_flatten($file['tmp_name'], 'upload/')){
 				$zip = 1; //set zip flag to true
 			}			
+		} else if ($fileType == 'json'){
+			move_uploaded_file($file["tmp_name"], $targetPath);
+			$json = 1;
+
 		} else {
 			//files uploaded (not as zip)
 			//move files from temp to upload folder
@@ -56,11 +61,13 @@
 	//validate successful upload
 	$verify = $shp + $shx + $dbf;
 	if ($zip == 1 || $verify == 3){
-		echo true;
+		echo 1;
+	} else if ($json == 1) {
+		echo 2;
 	} else {
 		//clear the upload folder
 		clear_upload();
-		echo false;
+		echo 0;
 	}
 	
 ?>
