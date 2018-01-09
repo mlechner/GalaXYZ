@@ -132,8 +132,9 @@ function nogoDijkstra(){
 			from: mks.from,
 			to: mks.to },
 		success: function(result){
-		//passes result to handle_nogo function
-		handle_nogo(result);}
+			//passes result to handle_nogo function
+			handle_nogo(result);
+		}
 	});
 }
 
@@ -165,9 +166,10 @@ function upload(){
 		processData:false,        // To send DOMDocument or non processed data file it is set to false
 		success: function(result){
 			//shp2json(result);
-			if (result){
-				console.log("yes");
+			if (result == 1){
 				shp2json();
+			} else if (result == 2){
+				readJson();
 			} else {
 				alert("Please select all associated files as well (.dbf .shx etc),\n"+
 				"or a zip file containing these files");
@@ -191,6 +193,28 @@ function shp2json(){
 			L.geoJSON(shp).addTo(map);
 		}
 	});
+}
+function readJson(){
+	console.log("readJson");
+	$.ajax({
+		url: 'php/readJson.php',
+		dataType: 'json',
+		success: function(result){
+			//console.log(JSON.parse(result));
+			var obj = JSON.parse(result)
+			console.log(obj);
+			
+			L.geoJSON(obj).addTo(map);
+		}
+	});
+}
+
+function downloadJson() {
+	
+	var data = "text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(nogo_Poly));
+	$('<a id="dlClick" href="data:' + data + '" download="NoGo_Polygons.json">download JSON</a>').appendTo('#downloadContainer');
+	
+	document.getElementById('dlClick').click(); 
 }
 
 
