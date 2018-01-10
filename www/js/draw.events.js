@@ -276,6 +276,9 @@ function onDrawDeleted(e){
           }
         } // else
 
+        // Delete from side panel
+        panel_delNogo(layer._leaflet_id);
+
     });
 
 } // onDrawDeleted 
