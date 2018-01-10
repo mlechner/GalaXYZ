@@ -149,46 +149,46 @@ LANGUAGE plpgsql;
 /* ===== TRSP VIA VERTICES TEST ============================================ */
 /* ========================================================================= */
 
-SELECT
-	*
-FROM
-	pgr_nogo_trspViaVertices(
-		'SELECT gid::INTEGER AS id, source::INTEGER, target::INTEGER, cost, the_geom AS geom FROM ways',
-		(SELECT ST_Union(geom) FROM overwrite_poly),
-		ARRAY[1,2,3,4],
-		FALSE,
-		FALSE
-	);
-	
-SELECT
-	*
-FROM
-	pgr_nogo_trspViaVertices(
-		'SELECT gid::INTEGER AS id, source::INTEGER, target::INTEGER, cost, reverse_cost, the_geom AS geom FROM ways',
-		(SELECT ST_Union(geom) FROM overwrite_poly),
-		ARRAY[1,2,3,4],
-		FALSE,
-		TRUE
-	);
-
-SELECT
-	*
-FROM
-	pgr_nogo_trspViaVertices(
-		'SELECT gid::INTEGER AS id, source::INTEGER, target::INTEGER, cost, the_geom AS geom FROM ways',
-		(SELECT ST_Union(geom) FROM overwrite_poly),
-		ARRAY[1,2,3,4],
-		TRUE,
-		FALSE
-	);
-
-SELECT
-	*
-FROM
-	pgr_nogo_trspViaVertices(
-		'SELECT gid::INTEGER AS id, source::INTEGER, target::INTEGER, cost, reverse_cost, the_geom AS geom FROM ways',
-		(SELECT ST_Union(geom) FROM overwrite_poly),
-		ARRAY[1,2,3,4],
-		TRUE,
-		TRUE
-	);
+-- SELECT
+-- 	*
+-- FROM
+-- 	pgr_nogo_trspViaVertices(
+-- 		'SELECT gid::INTEGER AS id, source::INTEGER, target::INTEGER, cost, the_geom AS geom FROM ways',
+-- 		(SELECT ST_Union(geom) FROM overwrite_poly),
+-- 		ARRAY[1,2,3,4],
+-- 		FALSE,
+-- 		FALSE
+-- 	);
+-- 	
+-- SELECT
+-- 	*
+-- FROM
+-- 	pgr_nogo_trspViaVertices(
+-- 		'SELECT gid::INTEGER AS id, source::INTEGER, target::INTEGER, cost, reverse_cost, the_geom AS geom FROM ways',
+-- 		(SELECT ST_Union(geom) FROM overwrite_poly),
+-- 		ARRAY[1,2,3,4],
+-- 		FALSE,
+-- 		TRUE
+-- 	);
+-- 
+-- SELECT
+-- 	*
+-- FROM
+-- 	pgr_nogo_trspViaVertices(
+-- 		'SELECT gid::INTEGER AS id, source::INTEGER, target::INTEGER, cost, the_geom AS geom FROM ways',
+-- 		(SELECT ST_Union(geom) FROM overwrite_poly),
+-- 		ARRAY[1,2,3,4],
+-- 		TRUE,
+-- 		FALSE
+-- 	);
+-- 
+-- SELECT
+-- 	*
+-- FROM
+-- 	pgr_nogo_trspViaVertices(
+-- 		'SELECT gid::INTEGER AS id, source::INTEGER, target::INTEGER, cost, reverse_cost, the_geom AS geom FROM ways',
+-- 		(SELECT ST_Union(geom) FROM overwrite_poly),
+-- 		ARRAY[1,2,3,4],
+-- 		TRUE,
+-- 		TRUE
+-- 	);
