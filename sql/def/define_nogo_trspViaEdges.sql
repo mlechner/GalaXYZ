@@ -154,50 +154,50 @@ LANGUAGE plpgsql;
 /* ===== TRSP VIA EDGES TEST =============================================== */
 /* ========================================================================= */
 
-SELECT
-	*
-FROM
-	pgr_nogo_trspViaEdges(
-		'SELECT gid::INTEGER AS id, source::INTEGER, target::INTEGER, cost, the_geom AS geom FROM ways',
-		(SELECT ST_Union(geom) FROM overwrite_poly),
-		ARRAY[1,10,50,150],
-		ARRAY[0.5,0.5,0.5,0.5]::FLOAT[],
-		FALSE,
-		FALSE
-	);
-	
-SELECT
-	*
-FROM
-	pgr_nogo_trspViaEdges(
-		'SELECT gid::INTEGER AS id, source::INTEGER, target::INTEGER, cost, reverse_cost, the_geom AS geom FROM ways',
-		(SELECT ST_Union(geom) FROM overwrite_poly),
-		ARRAY[1,10,50,150],
-		ARRAY[0.5,0.5,0.5,0.5]::FLOAT[],
-		FALSE,
-		TRUE
-	);
-
-SELECT
-	*
-FROM
-	pgr_nogo_trspViaEdges(
-		'SELECT gid::INTEGER AS id, source::INTEGER, target::INTEGER, cost, the_geom AS geom FROM ways',
-		(SELECT ST_Union(geom) FROM overwrite_poly),
-		ARRAY[1,10,50,150],
-		ARRAY[0.5,0.5,0.5,0.5]::FLOAT[],
-		TRUE,
-		FALSE
-	);
-
-SELECT
-	*
-FROM
-	pgr_nogo_trspViaEdges(
-		'SELECT gid::INTEGER AS id, source::INTEGER, target::INTEGER, cost, reverse_cost, the_geom AS geom FROM ways',
-		(SELECT ST_Union(geom) FROM overwrite_poly),
-		ARRAY[1,10,50,150],
-		ARRAY[0.5,0.5,0.5,0.5]::FLOAT[],
-		TRUE,
-		TRUE
-	);
+-- SELECT
+-- 	*
+-- FROM
+-- 	pgr_nogo_trspViaEdges(
+-- 		'SELECT gid::INTEGER AS id, source::INTEGER, target::INTEGER, cost, the_geom AS geom FROM ways',
+-- 		(SELECT ST_Union(geom) FROM overwrite_poly),
+-- 		ARRAY[1,10,50,150],
+-- 		ARRAY[0.5,0.5,0.5,0.5]::FLOAT[],
+-- 		FALSE,
+-- 		FALSE
+-- 	);
+-- 	
+-- SELECT
+-- 	*
+-- FROM
+-- 	pgr_nogo_trspViaEdges(
+-- 		'SELECT gid::INTEGER AS id, source::INTEGER, target::INTEGER, cost, reverse_cost, the_geom AS geom FROM ways',
+-- 		(SELECT ST_Union(geom) FROM overwrite_poly),
+-- 		ARRAY[1,10,50,150],
+-- 		ARRAY[0.5,0.5,0.5,0.5]::FLOAT[],
+-- 		FALSE,
+-- 		TRUE
+-- 	);
+-- 
+-- SELECT
+-- 	*
+-- FROM
+-- 	pgr_nogo_trspViaEdges(
+-- 		'SELECT gid::INTEGER AS id, source::INTEGER, target::INTEGER, cost, the_geom AS geom FROM ways',
+-- 		(SELECT ST_Union(geom) FROM overwrite_poly),
+-- 		ARRAY[1,10,50,150],
+-- 		ARRAY[0.5,0.5,0.5,0.5]::FLOAT[],
+-- 		TRUE,
+-- 		FALSE
+-- 	);
+-- 
+-- SELECT
+-- 	*
+-- FROM
+-- 	pgr_nogo_trspViaEdges(
+-- 		'SELECT gid::INTEGER AS id, source::INTEGER, target::INTEGER, cost, reverse_cost, the_geom AS geom FROM ways',
+-- 		(SELECT ST_Union(geom) FROM overwrite_poly),
+-- 		ARRAY[1,10,50,150],
+-- 		ARRAY[0.5,0.5,0.5,0.5]::FLOAT[],
+-- 		TRUE,
+-- 		TRUE
+-- 	);
