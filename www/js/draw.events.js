@@ -15,9 +15,9 @@ var nogo_Poly = [];
 var nogo_Line = [];
 
 var guides = new L.FeatureGroup();
-var tempRoutes = new L.FeatureGroup();
 var path;
 
+var DEFAULT_COLOR = "red";
 
 function registerDrawEvents(){
 
@@ -27,7 +27,6 @@ function registerDrawEvents(){
 
     // Add drawing guides
     map.addLayer(guides);
-    map.addLayer(tempRoutes);
 
 		console.log("Registering draw events on the map");
 
@@ -110,11 +109,13 @@ function onDrawCreated(e) {
   if (type.toUpperCase() === 'POLYGON' || type.toUpperCase() === 'RECTANGLE') {
 
     	// Change color of nogo polygon drawn to red
-      layer.setStyle({color:"red"});
+      layer.setStyle({color:DEFAULT_COLOR});
 
       // Display drawn polygon on the map
     	// Note nogoAreas is a feature collection already attached to the map
      	nogoAreas.addLayer(layer);
+
+      layer.on('click', e => nogoOnClick(e));
 
      	var coordsRefined = getFormatedCoords(layer);
 
@@ -195,10 +196,11 @@ function stageJSONFile(geojson) {
         // Create a polygon from the array and set style
         var polygon = L.polygon(latlngArray);
         polygon.properties = feature.geometry.properties;
-        polygon.setStyle({color:"red"});
+        polygon.setStyle({color:DEFAULT_COLOR});
 
         // Add to the feature group in the draw tool plugin
         nogoAreas.addLayer(polygon);
+        polygon.on('click', e => nogoOnClick(e));
 
         // Add to the panel
         panel_addNogo(polygon._leaflet_id);
@@ -464,4 +466,30 @@ function removeNogoPoly(leaflet_id) {
   } 
 
 } // removeNogoPoly
+
+
+function nogoOnClick(e) {
+  L.DomEvent.stop(e);
+  highlightNogoPoly(e.target._leaflet_id);
+}
+
+function highlightNogoPoly(leaflet_id) {
+    
+    removeAllNogoHighlights();
+
+    nogoAreas.eachLayer(function (layer) {
+      if(layer._leaflet_id == leaflet_id){
+        layer.setStyle({color:"green"});
+      }
+    });
+    
+}
+
+function removeAllNogoHighlights() {
+    nogoAreas.eachLayer(function (layer) {
+      layer.setStyle({color:DEFAULT_COLOR});
+    });
+}
+
+
 
