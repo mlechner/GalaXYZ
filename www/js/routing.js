@@ -38,22 +38,23 @@ function addDirectionPoint(x, y) {
 
         var isInside = validateNewPoint(point);
 
+        console.log(isInside);
+
         if(!isInside){
 
 
             if(directionPoints.length > 0){
             
                 guides.addLayer(getAntLineForLastDirPoint(new L.LatLng(y,x)));
-
-                // Find the closest node_id in the network and proces the new point
-
-                getClosestNode(x, y, node_id => processNewPoint(node_id, point));
             }
 
-            } else {
+            // Find the closest node_id in the network and proces the new point
+            getClosestNode(x, y, node_id => processNewPoint(node_id, point));
 
-                alert("Cannot add points inside existing nogo areas");
-            }
+        } else {
+            alert("Cannot add points inside existing nogo areas");
+            guides.clearLayers();
+        }
 
     } // if routing capabilty is enabled
 
