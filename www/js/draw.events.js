@@ -87,7 +87,7 @@ function onDrawStart(e) {
         map.off("mousemove") ;
 
         // Clear all the guide lines on the map
-        //guides.clearLayers();
+        guides.removeLayer(path);
 
       });
 
@@ -112,7 +112,7 @@ function onDrawCreated(e) {
 
   if (type.toUpperCase() === 'POLYGON' || type.toUpperCase() === 'RECTANGLE') {
 
-      var nogoIsOkay = validateNogoPoly(layer.toGeoJSON());
+      var nogoIsOkay = !validateNogoPoly(layer.toGeoJSON());
 
       if(nogoIsOkay){
       	// Change color of nogo polygon drawn to red
