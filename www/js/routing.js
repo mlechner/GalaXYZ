@@ -44,7 +44,8 @@ function addDirectionPoint(x, y) {
 
 
             if(directionPoints.length > 0){
-            
+                
+                // !!! y, x for leaflet lat lng format !
                 guides.addLayer(getAntLineForLastDirPoint(new L.LatLng(y,x)));
             }
 
