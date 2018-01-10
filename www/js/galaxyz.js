@@ -141,8 +141,8 @@ function nogoDijkstra(){
 function handle_nogo(result){	
 	$('#NoGoLoader').hide(); //hide the loader
 	route = JSON.parse(result); //set result to the 'route' variable
-	console.log(route);
-	L.geoJSON(route).addTo(map);
+	//console.log(route);
+	renderRoute(route);
 }
 
 /* 

@@ -15,6 +15,7 @@ var nogo_Poly = [];
 var nogo_Line = [];
 
 var guides = new L.FeatureGroup();
+var tempRoutes = new L.FeatureGroup();
 var path;
 
 
@@ -26,6 +27,7 @@ function registerDrawEvents(){
 
     // Add drawing guides
     map.addLayer(guides);
+    map.addLayer(tempRoutes);
 
 		console.log("Registering draw events on the map");
 
@@ -82,7 +84,7 @@ function onDrawStart(e) {
         map.off("mousemove") ;
 
         // Clear all the guide lines on the map
-        guides.clearLayers();
+        //guides.clearLayers();
 
       });
 
@@ -122,7 +124,7 @@ function onDrawCreated(e) {
       nogo_Poly.push(turfPoly);
 
      	// Construct a WKT of all the polygons
-     	console.log((getWKT(nogo_Poly, "Polygon")));
+     	//console.log((getWKT(nogo_Poly, "Polygon")));
       panel_addNogo(layer._leaflet_id);
 
   } // End polygon protocol
@@ -153,10 +155,9 @@ function onDrawCreated(e) {
    if((e.layerType).toUpperCase() === "MARKER"){
 
       if(directionPoints.length > 0){
-        map.addLayer(getAntLineForLastDirPoint(layer.getLatLng()));
+        guides.addLayer(getAntLineForLastDirPoint(layer.getLatLng()));
       }  
       addDirectionPoint(layer.getLatLng().lng, layer.getLatLng().lat);
-
    }
 
 }

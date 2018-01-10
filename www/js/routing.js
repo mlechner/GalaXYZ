@@ -207,7 +207,14 @@ function refreshRoute() {
 /**
  * Renders the found route on the map
  */
-function renderRoute(routeArray) {
+function renderRoute(route) {
+
+    // Clear previous guide layers  
+    //guides.clearLayers();
+    console.log(guides);
+
+    L.geoJSON(route).addTo(map);
+    guides.clearLayers();
 
 }
 
