@@ -102,6 +102,7 @@ function processNewPoint(node_id, point) {
  * @param {Geojson} point - Point clicked on the map
  */
 function renderDirectionPoint(node_id, point) {
+
     var addressOfMarker;
 
     // Create marker from Geojson
@@ -280,4 +281,5 @@ function getURLBackwardsGeocoder(markerCoor) {
 
     return url_geocodrequest;
 }
+
 
