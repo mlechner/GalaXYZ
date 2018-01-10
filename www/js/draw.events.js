@@ -157,9 +157,7 @@ function onDrawCreated(e) {
 
    if((e.layerType).toUpperCase() === "MARKER"){
 
-      if(directionPoints.length > 0){
-        guides.addLayer(getAntLineForLastDirPoint(layer.getLatLng()));
-      }  
+      // Check if point is on nogo area
       addDirectionPoint(layer.getLatLng().lng, layer.getLatLng().lat);
    }
 
