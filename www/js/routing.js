@@ -209,11 +209,9 @@ function refreshRoute() {
  */
 function renderRoute(route) {
 
-    // Clear previous guide layers  
-    //guides.clearLayers();
-    console.log(guides);
-
     L.geoJSON(route).addTo(map);
+
+    // Clear previous guide layers 
     guides.clearLayers();
 
 }

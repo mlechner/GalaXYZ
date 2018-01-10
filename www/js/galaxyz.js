@@ -188,9 +188,9 @@ function shp2json(){
 		success: function(result){
 			//console.log(JSON.parse(result));
 			var shp = JSON.parse(result)
-			console.log(shp);
-			
-			L.geoJSON(shp).addTo(map);
+			//console.log(shp);
+			stageJSONFile(shp);
+			//L.geoJSON(shp).addTo(map);
 		}
 	});
 }
