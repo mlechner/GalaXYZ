@@ -105,7 +105,7 @@ function onDrawCreated(e) {
 
   if (type.toUpperCase() === 'POLYGON' || type.toUpperCase() === 'RECTANGLE') {
 
-    	// Change color of nogo polygon to red
+    	// Change color of nogo polygon drawn to red
       layer.setStyle({color:"red"});
 
       // Display drawn polygon on the map
