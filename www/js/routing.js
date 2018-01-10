@@ -38,7 +38,6 @@ function addDirectionPoint(x, y) {
 
         var isInside = validateNewPoint(point);
 
-        console.log(isInside);
 
         if(!isInside){
 
@@ -72,7 +71,7 @@ function addDirectionPoint(x, y) {
  */
 function validateNewPoint(newPoint) {
 
-  var isInside = false;
+    var isInside = false;
 
       for(var i = 0; i < nogo_Poly.length; i++) {
         isInside = turf.inside(newPoint, nogo_Poly[i]);
@@ -80,6 +79,30 @@ function validateNewPoint(newPoint) {
           break;
         }
       }
+
+    return isInside;
+}
+/**
+ * Validates adding drawn nogo polygon by checking if it intersects with a direction point
+ *
+ * @param {GeoJSON} polygon - new polygon to validate
+ *
+ */
+function validateNogoPoly(polygon) {
+
+    var isInside = false;
+
+    for(var i = 0; i < directionPoints.length; i++) {
+
+        var item = directionPoints[i];
+        var point = turf.point([item.geometry.coordinates[1], item.geometry.coordinates[0]]);
+
+        isInside = turf.inside(point, polygon);
+        if(isInside){
+            break;
+        }
+
+    }
 
     return isInside;
 }
