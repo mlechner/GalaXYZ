@@ -33,12 +33,27 @@ function addDirectionPoint(x, y) {
 
         console.log("Processing route!");
 
+        // Check if point is on nogo area
         var point = turf.point([x, y]);
 
-        // Find the closest node_id in the network and proces the new point
+        var isInside = validateNewPoint(point);
 
-        getClosestNode(x, y, node_id => processNewPoint(node_id, point));
+        if(!isInside){
 
+
+            if(directionPoints.length > 0){
+            
+                guides.addLayer(getAntLineForLastDirPoint(new L.LatLng(y,x)));
+
+                // Find the closest node_id in the network and proces the new point
+
+                getClosestNode(x, y, node_id => processNewPoint(node_id, point));
+            }
+
+            } else {
+
+                alert("Cannot add points inside existing nogo areas");
+            }
 
     } // if routing capabilty is enabled
 
@@ -46,6 +61,26 @@ function addDirectionPoint(x, y) {
         console.log("%Something went wrong, routing capability for this program might not have been enabled, ensure the initRouting function is properly configured", "background: red; color: white; font-size: large");
 
 } // Add direction point
+
+/**
+ * Validates adding new via points
+ *
+ * @param {GeoJSON} newPoint - new point to validate
+ *
+ */
+function validateNewPoint(newPoint) {
+
+  var isInside = false;
+
+      for(var i = 0; i < nogo_Poly.length; i++) {
+        isInside = turf.inside(newPoint, nogo_Poly[i]);
+        if(isInside){
+          break;
+        }
+      }
+
+    return isInside;
+}
 
 /**
  * Process a new point on the map with its closest node ID
