@@ -15,8 +15,10 @@ var nogo_Poly = [];
 var nogo_Line = [];
 
 var guides = new L.FeatureGroup();
+var invalidNogos = new L.FeatureGroup();
 var path;
 
+var DEFAULT_COLOR = "red";
 
 function registerDrawEvents(){
 
@@ -26,6 +28,9 @@ function registerDrawEvents(){
 
     // Add drawing guides
     map.addLayer(guides);
+
+    // Add invalid nogos
+    map.addLayer(invalidNogos);
 
 		console.log("Registering draw events on the map");
 
@@ -82,7 +87,7 @@ function onDrawStart(e) {
         map.off("mousemove") ;
 
         // Clear all the guide lines on the map
-        guides.clearLayers();
+        guides.removeLayer(path);
 
       });
 
@@ -101,26 +106,43 @@ function onDrawCreated(e) {
 	var layer = e.layer;
   var type = e.layerType;
 
+  console.log(layer);
+
   // Protocol if the user draws a polygon on the map
 
   if (type.toUpperCase() === 'POLYGON' || type.toUpperCase() === 'RECTANGLE') {
 
-    	// Display drawn polygon on the map
-    	// Note nogoAreas is a feature collection already attached to the map
-     	nogoAreas.addLayer(layer);
+      var nogoIsOkay = !validateNogoPoly(layer.toGeoJSON());
 
-     	var coordsRefined = getFormatedCoords(layer);
+      if(nogoIsOkay){
+      	// Change color of nogo polygon drawn to red
+        layer.setStyle({color:DEFAULT_COLOR});
 
-     	// Create a turf polygn and add the leaflet layer id
-     	var turfPoly = getTurfPolygon(coordsRefined, layer._leaflet_id);
+        // Display drawn polygon on the map
+      	// Note nogoAreas is a feature collection already attached to the map
+       	nogoAreas.addLayer(layer);
 
-     	// Add to nogo-areas list
-     	//plotlayers.push(turfPoly);
-      nogo_Poly.push(turfPoly);
+        layer.on('click', e => nogoOnClick(e));
 
-     	// Construct a WKT of all the polygons
-     	console.log((getWKT(nogo_Poly, "Polygon")));
-      panel_addNogo(layer._leaflet_id);
+       	var coordsRefined = getFormatedCoords(layer);
+
+       	// Create a turf polygn and add the leaflet layer id
+       	var turfPoly = getTurfPolygon(coordsRefined, layer._leaflet_id);
+
+       	// Add to nogo-areas list
+       	//plotlayers.push(turfPoly);
+        nogo_Poly.push(turfPoly);
+
+       	// Construct a WKT of all the polygons
+       	//console.log((getWKT(nogo_Poly, "Polygon")));
+        panel_addNogo(layer._leaflet_id);
+      } 
+
+      else {
+
+        console.log("Cannot add nogo area(s) over a via point");
+        //invalidNogos.clearLayers();
+      }
 
   } // End polygon protocol
 
@@ -149,13 +171,71 @@ function onDrawCreated(e) {
 
    if((e.layerType).toUpperCase() === "MARKER"){
 
-      if(directionPoints.length > 0){
-        map.addLayer(getAntLineForLastDirPoint(layer.getLatLng()));
-      }  
+      // Check if point is on nogo area
       addDirectionPoint(layer.getLatLng().lng, layer.getLatLng().lat);
-
    }
 
+}
+
+/**
+* Add uploaded geojson to the leaflet draw plugin to be further edited and inlcuded
+* in the nogo areas list.
+* @param {GeoJSON} geojson - uploaded geojson object
+*/
+function stageJSONFile(geojson) {
+
+  if(geojson.type.toUpperCase() === "FEATURECOLLECTION") {
+
+    // Loop through the feature collection
+    for(var k = 0; k < geojson.features.length; k++) {
+
+      // Get a feature
+      var feature = turf.feature(geojson.features[k]);
+
+      for(var p = 0; p < feature.geometry.geometry.coordinates.length; p++) {
+        // Retrieve its coordinates 
+        var coordinates = feature.geometry.geometry.coordinates[p];
+
+        // Add to nogo poly array list
+        // Construct a turf polygon with the original geojson coordinates format
+        var turfPoly = turf.polygon([coordinates]);
+
+        // Validate the polygon
+        if(validateNogoPoly(turfPoly)){
+          // Convert to leaflet lat lng format
+          var latlngArray = [];
+          for(var i = 0 ; i < coordinates.length; i++) {
+            var latlng = new L.LatLng(parseFloat(coordinates[i][1]), parseFloat(coordinates[i][0]));
+            latlngArray.push(latlng);
+          }
+
+          // Create a polygon from the array and set style
+          var polygon = L.polygon(latlngArray);
+          polygon.properties = feature.geometry.properties;
+          polygon.setStyle({color:DEFAULT_COLOR});
+
+          // Add to the feature group in the draw tool plugin
+          nogoAreas.addLayer(polygon);
+          polygon.on('click', e => nogoOnClick(e));
+
+          // Add to the panel
+          panel_addNogo(polygon._leaflet_id);
+
+          
+
+          // Add a tag to the new polygon, this is useful when the the user deletes a polygon
+          turfPoly["id"] = polygon._leaflet_id;
+
+          //var turfPoly = getTurfPolygon(latlngArray, polygon._leaflet_id);
+          nogo_Poly.push(turfPoly);
+        }
+
+        else {
+          console.log("Cannot add nogo area(s) over a via point");
+        }
+      }
+    }
+  }
 }
 
 /**
@@ -272,6 +352,9 @@ function onDrawDeleted(e){
 
           }
         } // else
+
+        // Delete from side panel
+        panel_delNogo(layer._leaflet_id);
 
     });
 
@@ -402,4 +485,30 @@ function removeNogoPoly(leaflet_id) {
   } 
 
 } // removeNogoPoly
+
+
+function nogoOnClick(e) {
+  L.DomEvent.stop(e);
+  highlightNogoPoly(e.target._leaflet_id);
+}
+
+function highlightNogoPoly(leaflet_id) {
+    
+    removeAllNogoHighlights();
+
+    nogoAreas.eachLayer(function (layer) {
+      if(layer._leaflet_id == leaflet_id){
+        layer.setStyle({color:"green"});
+      }
+    });
+    
+}
+
+function removeAllNogoHighlights() {
+    nogoAreas.eachLayer(function (layer) {
+      layer.setStyle({color:DEFAULT_COLOR});
+    });
+}
+
+
 

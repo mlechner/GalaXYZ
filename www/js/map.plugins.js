@@ -52,7 +52,7 @@ function getDrawControlPlugin(layer){
 
 	 var drawControl = new L.Control.Draw({
 	      position:'topleft',
-	      draw: {circle:false, circlemarker:false},
+	      draw: {circle:false, circlemarker:false, marker: { repeatMode: true }},
 	      edit: {featureGroup: layer}
 	  });
 

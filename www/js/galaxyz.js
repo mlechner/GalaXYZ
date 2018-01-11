@@ -143,7 +143,6 @@ function nogoDijkstra(){
 function handle_nogo(result){	
 	$('#NoGoLoader').hide(); //hide the loader
 	route = JSON.parse(result); //set result to the 'route' variable
-	console.log(route);
 	renderRoute(route);
 }
 
@@ -191,8 +190,10 @@ function shp2json(){
 			//console.log(JSON.parse(result));
 			var shp = JSON.parse(result)
 			//console.log(shp);
-			//stageJSONFile(shp);
-			L.geoJSON(shp).addTo(map);
+
+			stageJSONFile(shp);
+			//L.geoJSON(shp).addTo(map);
+
 		}
 	});
 }
