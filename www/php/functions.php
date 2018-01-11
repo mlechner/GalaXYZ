@@ -25,6 +25,7 @@
 			echo "Not connected : " . pg_error();
 			exit;
 		}
+		return $conn;
 	}
 
 	/*

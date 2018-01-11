@@ -126,14 +126,16 @@ function nogoDijkstra(){
 	//calls the ajax_nogoDijkstra function
 	//which executes a query using the nogoDijkstra
 	//function, and returns the edges and corresponding data
+	var nodesList = [parseInt(mks.from), parseInt(mks.to)];
 	$.ajax({url: "php/ajax_nogoDijkstra.php", 
 		type: "POST",
 		data: {data: JSON.stringify(nogo_Poly), 
-			from: mks.from,
-			to: mks.to },
+			nodes: JSON.stringify(nodesList) },
 		success: function(result){
 			//passes result to handle_nogo function
 			handle_nogo(result);
+			//console.log(result);
+			
 		}
 	});
 }
@@ -142,7 +144,7 @@ function handle_nogo(result){
 	$('#NoGoLoader').hide(); //hide the loader
 	route = JSON.parse(result); //set result to the 'route' variable
 	console.log(route);
-	L.geoJSON(route).addTo(map);
+	renderRoute(route);
 }
 
 /* 
@@ -188,8 +190,8 @@ function shp2json(){
 		success: function(result){
 			//console.log(JSON.parse(result));
 			var shp = JSON.parse(result)
-			console.log(shp);
-			
+			//console.log(shp);
+			//stageJSONFile(shp);
 			L.geoJSON(shp).addTo(map);
 		}
 	});
