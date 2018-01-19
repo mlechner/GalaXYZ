@@ -303,6 +303,17 @@ function onDrawEdited(e){
 }
 
 /**
+* Changes maker's nodeid to new position and reroute
+*
+* @param {L.Event} e - marker event
+* @param {number} node_id - new node id of the evet location
+*/
+function onMarkerDragEnd(event, node_id) {
+    event.target.node_id = node_id;
+    nogoDijkstra();
+}
+
+/**
 * Event for draw edited
 * Will only treat item edited on the layer list
 * Computes the new geometry and replaces it at the plotlayers array 
