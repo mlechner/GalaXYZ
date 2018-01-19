@@ -231,7 +231,7 @@ function renderDirectionPoint(node_id, point) {
 
 
         // Simple tooltip
-        .bindTooltip("Node ID: " + node_id, {direction: 'top', permanent: true});
+        //.bindTooltip("Node ID: " + node_id, {direction: 'top', permanent: true});
 
 //----------------------------------------
 
@@ -268,15 +268,17 @@ function refreshRoute() {
 /**
  * Renders the found route on the map
  */
+var routeLayer;
 function renderRoute(route) {
 
     // Clear old route
-    try {
+    console.log(map);
+    if (map.hasLayer(routeLayer)) {
         map.removeLayer(routeLayer);
-    } catch (e) {}
+    }
 
     // Add new route to map
-    var routeLayer = L.geoJSON(route).addTo(map);
+    routeLayer = L.geoJSON(route).addTo(map);
 
     // Clear previous guide layers 
     guides.clearLayers();

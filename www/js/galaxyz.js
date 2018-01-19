@@ -116,21 +116,9 @@ function getClosestNode(x,y, callback) {
 function nogoDijkstra(){
 
 	$('#NoGoLoader').show(); //show the loader
+
 	var nogos = getAllNogoAreas().polygon; //get all nogo areas
-
-	// try{
-	// 	mks = getFromToPoints(); //get start/end nodes
-	// } catch(err) {
-	// 	//start/end points have not been selected
-	// 	alert("Please select your start and end  points");
-	// 	return;
-	// }
-	//calls the ajax_nogoDijkstra function
-	//which executes a query using the nogoDijkstra
-	//function, and returns the edges and corresponding data
-
-	var nodeIds = getFromToPoints();
-    console.log("nodeIDs: " + nodeIds);
+	var nodeIds = getFromToPoints(); // get all node ids
 
     if (nodeIds.length > 1) {
 		$.ajax({url: "php/ajax_nogoDijkstra.php",

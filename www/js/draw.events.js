@@ -144,6 +144,8 @@ function onDrawCreated(e) {
         //invalidNogos.clearLayers();
       }
 
+      nogoDijkstra();
+
   } // End polygon protocol
 
 
@@ -173,7 +175,7 @@ function onDrawCreated(e) {
 
       // Check if point is on nogo area
       addDirectionPoint(layer.getLatLng().lng, layer.getLatLng().lat);
-      console.log(directionPoints)
+      //console.log(directionPoints)
    }
 
 }
