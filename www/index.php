@@ -44,16 +44,18 @@
 	
 	<body>
 		<!--test comment-->
-		<div class="row">
-			<div class="col-sm-12" style="border-bottom: 1px solid black;">
-				<h1>GalaXYZ Routing</h1>
+		<div id="titleParent" style="margin:0px;">
+			<div class="row">
+				<div class="col-sm-12" style="border-bottom: 1px solid black;">
+					<h1>GalaXYZ Routing</h1>
+				</div>
 			</div>
 		</div>
 		<div id="map-container" class="row">
 			<!-- Div occupied by map -->
 			<div id='map' style=""></div>
 			<!-- geocoder html -->
-			<div class="row">
+			<div class="row" style="margin-top: 25px;">
 				<input type="search" class="form-control col-sm-4" style="margin-left: 15px;" id="geocoder" list="address" cols="50" value="Address Search" ></input>
 				<button type="button" id="geocButton" style="margin-left: 5px; padding: 6px;" class="btn btn-default">GO</button>
 			</div>
