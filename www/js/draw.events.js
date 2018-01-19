@@ -471,7 +471,7 @@ function removeNogoPoly(leaflet_id) {
 
     // Remove from panel
     panel_delNogo(leaflet_id);
-
+    nogoDijkstra();
     return true;
 
   }

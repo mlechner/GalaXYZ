@@ -4,9 +4,15 @@
     top: 80px;
     z-index: 400;
 }
+#titleParent{
+    height: 10vh;
+}
+#map-container{
+    height: 89vh;
+}
 
 #map {
-    height: 600px;
+    height: 100%;
     width: 100%;
     position: relative;
 }
