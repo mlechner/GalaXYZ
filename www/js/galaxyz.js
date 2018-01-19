@@ -36,7 +36,8 @@ function panel_addNogo(leaflet_id){
 
 	nogoCount += 1;
 	//string containing the HTML to be appended when a nogo is added
-	addPoly = '<div class="row nogoitem" id="nogoitem'+leaflet_id+'">\
+	addPoly = '<div class="row nogoitem" id="nogoitem'+leaflet_id+'" \
+	onmouseover="highlightNogoPoly('+leaflet_id+')" onmouseout="removeAllNogoHighlights()">\
 				<div class="col-xs-2" style="padding-left: 0px; padding-top: 5px;">\
 					<span class="glyphicon glyphicon-stop" style="font-size: 2.0em;"></span>\
 				</div>\
