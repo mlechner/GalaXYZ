@@ -11,6 +11,7 @@ var routingCapability = false;
 
 var node_id;
 
+var directionMarkers = [];
 
 function initRouting() {
 
@@ -166,8 +167,8 @@ function renderDirectionPoint(node_id, point) {
     var addressOfMarker;
 
     // Create marker from Geojson
-    marker = new L.marker([point.geometry.coordinates[1], point.geometry.coordinates[0]], {draggable: 'true'});
-
+    var marker = new L.marker([point.geometry.coordinates[1], point.geometry.coordinates[0]], {draggable: 'true'});
+    
     //----------------------------------------
 
     // Add ondrag event.
@@ -178,8 +179,19 @@ function renderDirectionPoint(node_id, point) {
             var newMarker = event.target;
             var position = newMarker.getLatLng();
             marker.setLatLng(position);
-            map.panTo(position);
 
+        })
+
+        .on('dragend', function(event) {
+
+            var newMarker = event.target;
+
+            var x = event.target.getLatLng().lng;
+            var y = event.target.getLatLng().lat;
+
+            getClosestNode(x, y, node_id => onMarkerDragEnd(event, node_id));
+
+            
         })
 
         .on('click', function (event) {
@@ -236,6 +248,7 @@ function renderDirectionPoint(node_id, point) {
 //----------------------------------------
 
     directions.addLayer(marker);
+    marker["node_id"] = node_id;
 
 //----------------------------------------
 
@@ -272,7 +285,6 @@ var routeLayer;
 function renderRoute(route) {
 
     // Clear old route
-    console.log(map);
     if (map.hasLayer(routeLayer)) {
         map.removeLayer(routeLayer);
     }
@@ -302,12 +314,18 @@ function getAllNogoAreas() {
 function getFromToPoints() {
 
     var dirPoints = [];
+
     //dirPoints["from"] = directionPoints[0].node_id;
     //dirPoints["to"] = directionPoints[1].node_id;
-
+    /**
     for (var i=0; i<directionPoints.length; i++) {
         dirPoints[i] = directionPoints[i].node_id;
     }
+    */
+
+    directions.eachLayer(function (marker) {
+        dirPoints.push(marker.node_id);
+    });
 
     return dirPoints;
 
