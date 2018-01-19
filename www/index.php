@@ -10,20 +10,21 @@
 		<meta charset = "UTF-8"/>
 		<meta name = "viewport" content="width=device-width, initial-scale=1"/>
 		<title>GalaXYZ</title>
-		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
-		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet.draw/0.4.13/leaflet.draw.css">
 
-
+		<link rel="stylesheet" href="lib/bootstrap-3.3.7/dist/css/bootstrap.min.css">
+		<link rel="stylesheet" href="lib/leafletdraw/leaflet.draw.css">
+		
 		<script src="lib/jquery.min.js"></script>
+		
 		<link rel="stylesheet" href="lib/leaflet/leaflet.css" />
 		<script src="lib/leaflet/leaflet.js"></script>
-		<script src="https://unpkg.com/leaflet-ant-path" type="text/javascript"></script>
+		<script src="lib/leaflet/leaflet-ant-path" type="text/javascript"></script>
 		<script type="text/javascript" src="lib/leaflet/leafletembed.js"></script>
 
 		<link rel="stylesheet" href="lib/stylesheet.css">
 		
-		<script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet.draw/0.4.13/leaflet.draw.js"></script>
-		<script src="https://cdnjs.cloudflare.com/ajax/libs/Turf.js/5.0.4/turf.min.js"></script>
+		<script src="lib/leafletdraw/leaflet.draw.js"></script>
+		<script src="lib/turf/turf.min.js"></script>
 
 
 		<script type="text/javascript" src="js/map.plugins.js"></script>
