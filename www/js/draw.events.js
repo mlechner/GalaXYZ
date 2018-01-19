@@ -39,7 +39,7 @@ function registerDrawEvents(){
 		map.on(L.Draw.Event.DELETED, e => onDrawDeleted(e));
     map.on(L.Draw.Event.DRAWSTART, e => onDrawStart(e));
 
-	} 
+	}
   else
 		console.error("Draw control might not have been initialised on the map");
 }
@@ -173,6 +173,7 @@ function onDrawCreated(e) {
 
       // Check if point is on nogo area
       addDirectionPoint(layer.getLatLng().lng, layer.getLatLng().lat);
+      console.log(directionPoints)
    }
 
 }
