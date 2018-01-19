@@ -231,7 +231,7 @@ function renderDirectionPoint(node_id, point) {
 
 
         // Simple tooltip
-        .bindTooltip("Node ID: " + node_id, {direction: 'top', permanent: true});
+        //.bindTooltip("Node ID: " + node_id, {direction: 'top', permanent: true});
 
 //----------------------------------------
 
@@ -247,11 +247,11 @@ function renderDirectionPoint(node_id, point) {
 function findRoute(from_node_id, to_node_id) {
 
     nogoDijkstra();
-    console.log("%cFinding route..................................", "background: green; color: white; font-size: large");
-    console.log("From node ID: " + from_node_id + " ;\nTo node ID: ", to_node_id);
+    //console.log("%cFinding route..................................", "background: green; color: white; font-size: large");
+    //console.log("From node ID: " + from_node_id + " ;\nTo node ID: ", to_node_id);
 
-    console.log("%cAvailable nogo areas............................", "background: red; color: white; font-size: large");
-    console.log(getAllNogoAreas());
+    //console.log("%cAvailable nogo areas............................", "background: red; color: white; font-size: large");
+    //console.log(getAllNogoAreas());
 }
 
 /**
@@ -259,18 +259,26 @@ function findRoute(from_node_id, to_node_id) {
  */
 function refreshRoute() {
 
-    console.log("%Refreshing route..................................", "background: green; color: white; font-size: large");
+    //console.log("%Refreshing route..................................", "background: green; color: white; font-size: large");
 
-    console.log("%cAvailable nogo areas............................", "background: red; color: white; font-size: large");
-    console.log(getAllNogoAreas());
+    ///console.log("%cAvailable nogo areas............................", "background: red; color: white; font-size: large");
+    //console.log(getAllNogoAreas());
 }
 
 /**
  * Renders the found route on the map
  */
+var routeLayer;
 function renderRoute(route) {
 
-    L.geoJSON(route).addTo(map);
+    // Clear old route
+    console.log(map);
+    if (map.hasLayer(routeLayer)) {
+        map.removeLayer(routeLayer);
+    }
+
+    // Add new route to map
+    routeLayer = L.geoJSON(route).addTo(map);
 
     // Clear previous guide layers 
     guides.clearLayers();
@@ -294,8 +302,13 @@ function getAllNogoAreas() {
 function getFromToPoints() {
 
     var dirPoints = [];
-    dirPoints["from"] = directionPoints[0].node_id;
-    dirPoints["to"] = directionPoints[1].node_id;
+    //dirPoints["from"] = directionPoints[0].node_id;
+    //dirPoints["to"] = directionPoints[1].node_id;
+
+    for (var i=0; i<directionPoints.length; i++) {
+        dirPoints[i] = directionPoints[i].node_id;
+    }
+
     return dirPoints;
 
 }

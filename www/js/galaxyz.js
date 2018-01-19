@@ -12,11 +12,11 @@ function sendAjax(){
 
 // handles the result of the db ajax query
 function handleAjax(result){
-	console.log(result);
+	//console.log(result);
 	var newResult = JSON.parse(result); // convert string to json object
 	var coordArray = newResult.coordinates; // set coordinates to array
-	console.log(coordArray[0][0]); // lon of a single coord
-	console.log(coordArray[0][1]); // lat of a single coord
+	//console.log(coordArray[0][0]); // lon of a single coord
+	//console.log(coordArray[0][1]); // lat of a single coord
 }
 
 function panelDisplay(){
@@ -92,7 +92,7 @@ function saveDesc(leaflet_id){
 	}).indexOf(leaflet_id);
 	//append to the description to the item in the nogo_Poly array 
 	nogo_Poly[index]['desc'] = desc;
-	console.log(nogo_Poly[index]);
+	//console.log(nogo_Poly[index]);
 }
 // allows for editing of a NoGo polygon's description
 function editDesc(leaflet_id){
@@ -114,30 +114,25 @@ function getClosestNode(x,y, callback) {
 }
 //executes the ajax function to generate the route
 function nogoDijkstra(){
+
 	$('#NoGoLoader').show(); //show the loader
+
 	var nogos = getAllNogoAreas().polygon; //get all nogo areas
-	try{
-		mks = getFromToPoints(); //get start/end nodes
-	} catch(err) {
-		//start/end points have not been selected
-		alert("Please select your start and end  points");
-		return;
-	}
-	//calls the ajax_nogoDijkstra function
-	//which executes a query using the nogoDijkstra
-	//function, and returns the edges and corresponding data
-	var nodesList = [parseInt(mks.from), parseInt(mks.to)];
-	$.ajax({url: "php/ajax_nogoDijkstra.php", 
-		type: "POST",
-		data: {data: JSON.stringify(nogo_Poly), 
-			nodes: JSON.stringify(nodesList) },
-		success: function(result){
-			//passes result to handle_nogo function
-			handle_nogo(result);
-			//console.log(result);
-			
-		}
-	});
+	var nodeIds = getFromToPoints(); // get all node ids
+
+    if (nodeIds.length > 1) {
+		$.ajax({url: "php/ajax_nogoDijkstra.php",
+			type: "POST",
+			data: {data: JSON.stringify(nogo_Poly),
+				nodes: JSON.stringify(nodeIds) },
+			success: function(result){
+				//passes result to handle_nogo function
+				handle_nogo(result);
+				//console.log(result);
+
+			}
+		});
+    }
 }
 
 function handle_nogo(result){	
@@ -182,7 +177,7 @@ function upload(){
 function shp2json(){
 	//console.log(name);
 	//console.log(ajax_url);
-	console.log("shp2json");
+	//console.log("shp2json");
 	$.ajax({
 		url: 'php/shp2json.php',
 		dataType: 'json',
@@ -198,14 +193,14 @@ function shp2json(){
 	});
 }
 function readJson(){
-	console.log("readJson");
+	//console.log("readJson");
 	$.ajax({
 		url: 'php/readJson.php',
 		dataType: 'json',
 		success: function(result){
 			//console.log(JSON.parse(result));
 			var obj = JSON.parse(result)
-			console.log(obj);
+			//console.log(obj);
 			
 			L.geoJSON(obj).addTo(map);
 		}
