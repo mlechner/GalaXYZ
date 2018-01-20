@@ -24,6 +24,8 @@ Set up the required extensions by executing the following queries on this new da
 
 If the extension creation for pgrouting fails, you may need to install the extension on your computer first, so that PostgreSQL can extend a database with it.  See the [pgrouting](http://pgrouting.org/) website for more information.
 
+After all that is done, download [the repository for the nogo queries themselves](https://github.com/HsKA-OSGIS/GalaXYZ-NogoPgRouting), and execute the one called `/nogo_queriesdefine_nogo_trspviaVertices.sql`.  This will enable the query used in the website to do routing along multiple points.
+
 ## Getting data into the database
 
 In pgAdmin, right-click on the database and select "Restore", and select the `nogo_dijkstra.backup` file in the `/db` folder.  That's it!
