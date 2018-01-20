@@ -58,3 +58,16 @@ sudo chmod 777 -R /path/to/upload
 ```
 
 The website can then be deployed to your server.  On Ubuntu systems, you can use the folder `/var/www/html` as a server, just put the contents of the `/www` folder in a folder with a specific name (ex. `GalaXYZ`), and you can then access it in a web browser by going to the url `http://localhost/GalaXYZ/`
+
+## Credits
+
+Credit must be given to the pgRouting team, who have designed such a great open source routing library, and provided help and insight during development.
+
+These functions were developed as part of the class "Open Source GIS" at Hochschule Karlsruhe, with [Dr. Marco Lechner](https://www.researchgate.net/profile/Marco_Lechner) as instructor.
+
+The group consisted of:
+
+* [Isaac Boates](https://www.linkedin.com/in/isaac-boates-338547100/)
+* [Rob Coppinger](https://www.linkedin.com/in/rob-coppinger-456b17103/)
+* [Anja Fürst](https://www.linkedin.com/in/anja-f%C3%BCrst-136899144/)
+* [Olumide Igbiloba](https://www.linkedin.com/in/olumide-igbiloba/)
