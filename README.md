@@ -41,6 +41,7 @@ For the webpage to function correctly, the following needs to be installed:
 * php7.0
 * libapache2-mod-php7.0
 * php7.0-XML
+* php-zip
 * php pgsql
 
 ```sh
