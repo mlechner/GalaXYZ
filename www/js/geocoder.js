@@ -1,14 +1,12 @@
 $(document).ready(function () {
 
-    //Access Credentials
-    //Valid till March 8 2018
-    var app_id = "VArrXyHCf6xwnR8Wwp5X";
-    var app_code = "4PrsrNN9oitLO0DPSEncLg";
-
     //Area to search in
     // BBox from config file (just preference no Exclusion!)
     // searchDistance to Exclude serach outside BBox completely
     $.getJSON("config.json", function (data) {
+        var app_id = data['geocoder_app_id'];
+        var app_code = data['geocoder_app_code'];
+
         var coor = data['geo_bbox'];
         var latUpLeft = coor['1'];
         var longUpLeft = coor['0'];

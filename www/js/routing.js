@@ -13,6 +13,23 @@ var node_id;
 
 var directionMarkers = [];
 
+var app_id;
+var app_code;
+
+//Get GeocoderCredits when document ready
+$(document).ready(function () {
+    function getAppCredits() {
+        return $.getJSON("config.json", function (data) {
+        });
+    }
+
+    //Wait till Get Config AppCredits
+    getAppCredits().done(function (returndata) {
+        app_id = returndata['geocoder_app_id'];
+        app_code = returndata['geocoder_app_code'];
+    });
+});
+
 function initRouting() {
 
     directions = new L.FeatureGroup();
@@ -40,13 +57,13 @@ function addDirectionPoint(x, y) {
         var isInside = validateNewPoint(point);
 
 
-        if(!isInside){
+        if (!isInside) {
 
 
-            if(directionPoints.length > 0){
-                
+            if (directionPoints.length > 0) {
+
                 // !!! y, x for leaflet lat lng format !
-                guides.addLayer(getAntLineForLastDirPoint(new L.LatLng(y,x)));
+                guides.addLayer(getAntLineForLastDirPoint(new L.LatLng(y, x)));
             }
 
             // Find the closest node_id in the network and proces the new point
@@ -74,15 +91,16 @@ function validateNewPoint(newPoint) {
 
     var isInside = false;
 
-      for(var i = 0; i < nogo_Poly.length; i++) {
+    for (var i = 0; i < nogo_Poly.length; i++) {
         isInside = turf.inside(newPoint, nogo_Poly[i]);
-        if(isInside){
-          break;
+        if (isInside) {
+            break;
         }
-      }
+    }
 
     return isInside;
 }
+
 /**
  * Validates adding drawn nogo polygon by checking if it intersects with a direction point
  *
@@ -93,13 +111,13 @@ function validateNogoPoly(polygon) {
 
     var isInside = false;
 
-    for(var i = 0; i < directionPoints.length; i++) {
+    for (var i = 0; i < directionPoints.length; i++) {
 
         var item = directionPoints[i];
         var point = turf.point([item.geometry.coordinates[1], item.geometry.coordinates[0]]);
 
         isInside = turf.inside(point, polygon);
-        if(isInside){
+        if (isInside) {
             break;
         }
 
@@ -168,7 +186,7 @@ function renderDirectionPoint(node_id, point) {
 
     // Create marker from Geojson
     var marker = new L.marker([point.geometry.coordinates[1], point.geometry.coordinates[0]], {draggable: 'true'});
-    
+
     //----------------------------------------
 
     // Add ondrag event.
@@ -182,7 +200,7 @@ function renderDirectionPoint(node_id, point) {
 
         })
 
-        .on('dragend', function(event) {
+        .on('dragend', function (event) {
 
             var newMarker = event.target;
 
@@ -191,7 +209,7 @@ function renderDirectionPoint(node_id, point) {
 
             getClosestNode(x, y, node_id => onMarkerDragEnd(event, node_id));
 
-            
+
         })
 
         .on('click', function (event) {
@@ -202,6 +220,7 @@ function renderDirectionPoint(node_id, point) {
 
                 //Get URL
                 var url = getURLBackwardsGeocoder(markerCoor);
+                console.log("url", url);
 
                 // send Backwards Geocoding request
                 $.getJSON(url, function (data, success) {
@@ -228,6 +247,13 @@ function renderDirectionPoint(node_id, point) {
                             markerAddress = currAddress['Street'] + ", " + currAddress['HouseNumber'] + ", " + currAddress['City'];
                         }
 
+                        try {
+                            marker.unbindTooltip();
+                        }
+                        catch (err) {
+                            console.log("Unbind Popup ", err);
+                        }
+                        //Add Info to Marker
                         marker.bindTooltip("Node ID: " + node_id + " Address: " + markerAddress, {
                             direction: 'top',
                             permanent: true
@@ -242,8 +268,8 @@ function renderDirectionPoint(node_id, point) {
         )
 
 
-        // Simple tooltip
-        //.bindTooltip("Node ID: " + node_id, {direction: 'top', permanent: true});
+    // Simple tooltip
+    //.bindTooltip("Node ID: " + node_id, {direction: 'top', permanent: true});
 
 //----------------------------------------
 
@@ -282,6 +308,7 @@ function refreshRoute() {
  * Renders the found route on the map
  */
 var routeLayer;
+
 function renderRoute(route) {
 
     // Clear old route
@@ -318,10 +345,10 @@ function getFromToPoints() {
     //dirPoints["from"] = directionPoints[0].node_id;
     //dirPoints["to"] = directionPoints[1].node_id;
     /**
-    for (var i=0; i<directionPoints.length; i++) {
+     for (var i=0; i<directionPoints.length; i++) {
         dirPoints[i] = directionPoints[i].node_id;
     }
-    */
+     */
 
     directions.eachLayer(function (marker) {
         dirPoints.push(marker.node_id);
@@ -355,10 +382,6 @@ function getAntLineForLastDirPoint(to_latlng) {
 
 //Backwards Geocoder
 function getURLBackwardsGeocoder(markerCoor) {
-    //Access Credentials
-    //Valid till March 8 2018
-    var app_id = "VArrXyHCf6xwnR8Wwp5X";
-    var app_code = "4PrsrNN9oitLO0DPSEncLg";
 
     var lat = markerCoor['lat'];
     var long = markerCoor['lng'];
@@ -369,6 +392,7 @@ function getURLBackwardsGeocoder(markerCoor) {
         "https://reverse.geocoder.cit.api.here.com/6.2/reversegeocode.json?prox="
         + coordinates + "&mode=retrieveAddresses&maxresults=1&gen=1&app_id=" + app_id
         + "&app_code=" + app_code;
+    console.log(url_geocodrequest);
 
     return url_geocodrequest;
 }
