@@ -391,7 +391,6 @@ function getURLBackwardsGeocoder(markerCoor) {
         "https://reverse.geocoder.cit.api.here.com/6.2/reversegeocode.json?prox="
         + coordinates + "&mode=retrieveAddresses&maxresults=1&gen=1&app_id=" + app_id
         + "&app_code=" + app_code;
-    console.log(url_geocodrequest);
 
     return url_geocodrequest;
 }
