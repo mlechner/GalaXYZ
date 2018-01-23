@@ -34,7 +34,8 @@ Note: if you want to use a different region, you can generate a network dataset 
 
 ## Setting up website
 
-the `config.json` file in `/www` must be edited to correctly reference your database
+the `config.json` file in `/www` must be edited to correctly reference your database. For using the Geocoder create an account for HERE and get valid access keys ([HERE Geocoder API](https://developer.here.com/documentation/geocoder/topics/introduction.html), 90 day free trial possible (January 18)).
+
 
 For the webpage to function correctly, the following needs to be installed:
 * apache2
