@@ -220,7 +220,6 @@ function renderDirectionPoint(node_id, point) {
 
                 //Get URL
                 var url = getURLBackwardsGeocoder(markerCoor);
-                console.log("url", url);
 
                 // send Backwards Geocoding request
                 $.getJSON(url, function (data, success) {
