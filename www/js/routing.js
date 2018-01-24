@@ -359,7 +359,7 @@ function getAntLineForLastDirPoint(to_latlng) {
     directions.eachLayer(function (marker) {
         var item = marker;
         item['latlng'] = marker.getLatLng();
-        allPoint.push(item);
+        dirPoints.push(item);
     });
 
     try {
