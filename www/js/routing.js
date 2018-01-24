@@ -98,11 +98,13 @@ function validateNogoPoly(polygon) {
 
     var contains = false;
 
+    console.log(polygon);
+
     directions.eachLayer(function (marker) {
+
+        var point = marker.toGeoJSON();
         
-        var turfPoint = turf.point([marker._latlng.lng, marker._latlng.lat]);
-        
-        var isInside = turf.inside(turfPoint, polygon);
+        var isInside = turf.inside(point, polygon);
 
         if(isInside == true) {
             contains = true;
@@ -137,7 +139,7 @@ function processNewPoint(node_id, point) {
         // Create Leaflet latlng
         point.latlng = [point.geometry.coordinates[1], point.geometry.coordinates[0]];
 
-        // Add point to list
+        // Add point to list and render
         directionPoints.push(point);
         renderDirectionPoint(node_id, point);
 
@@ -161,7 +163,7 @@ function processNewPoint(node_id, point) {
 /**
  * Handles the general rendering of the point on the map
  *
- * To be worked on later by adding more listeners and bind popup
+ * To be worked on later by adding more listeners and bind popup and directions
 
  * @param {number} node_id  -  Closest node id of the point
  * @param {Geojson} point - Point clicked on the map
@@ -188,6 +190,7 @@ function renderDirectionPoint(node_id, point) {
 
         .on('dragstart', function (event) {
 
+            map.closePopup();
             marker['previouslocation'] = marker.getLatLng();
 
         })
@@ -198,8 +201,6 @@ function renderDirectionPoint(node_id, point) {
 
             var x = event.target.getLatLng().lng;
             var y = event.target.getLatLng().lat;
-
-            console.log(event);
 
             var contains = validateNewPoint(event.target.toGeoJSON());
 
@@ -213,9 +214,6 @@ function renderDirectionPoint(node_id, point) {
                 alert("Cannot drag marker inside a nogo area!");
             }
 
-            
-
-            
         })
 
         .on('click', function (event) {
@@ -252,7 +250,7 @@ function renderDirectionPoint(node_id, point) {
                             markerAddress = currAddress['Street'] + ", " + currAddress['HouseNumber'] + ", " + currAddress['City'];
                         }
 
-                        marker.bindTooltip("Node ID: " + node_id + " Address: " + markerAddress, {
+                        marker.bindPopup(" Address: " + markerAddress, {
                             direction: 'top',
                             permanent: true
                         });
@@ -265,9 +263,6 @@ function renderDirectionPoint(node_id, point) {
             }
         )
 
-
-        // Simple tooltip
-        //.bindTooltip("Node ID: " + node_id, {direction: 'top', permanent: true});
 
 //----------------------------------------
 
