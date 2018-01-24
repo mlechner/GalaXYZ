@@ -131,7 +131,7 @@ function onDrawCreated(e) {
 
         nogo_Poly.push(turfPoly);
 
-        layer["ok"] = true;
+        panel_addNogo(layer._leaflet_id);
 
        	// Add to nogo-areas list
        	//plotlayers.push(turfPoly);
@@ -227,8 +227,6 @@ function stageJSONFile(geojson) {
 
           // Add to the panel
           panel_addNogo(polygon._leaflet_id);
-
-          
 
           // Add a tag to the new polygon, this is useful when the the user deletes a polygon
           turfPoly["id"] = polygon._leaflet_id;
