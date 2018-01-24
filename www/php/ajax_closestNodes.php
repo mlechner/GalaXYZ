@@ -7,6 +7,8 @@
 	$y = $_GET['y'];
 	$node_id = 0;
 
+	$param = "SRID=4326;POINT($x $y)";
+	
 	$sql = "SELECT
 	id
 	FROM
@@ -14,12 +16,12 @@
 	ORDER BY
 		ST_Distance(
 			ways_vertices_pgr.the_geom,
-			ST_GeomFromEWKT('SRID=4326;POINT(".$x." ".$y.")')
+			ST_GeomFromEWKT($1)
 		) ASC
 	LIMIT
 		1;";
 
-	$result = pg_query( $sql ) or die('Query Failed: ' .pg_last_error());
+	$result = pg_query_params( $conn, $sql, array($param) ) or die('Query Failed: ' .pg_last_error());
 	while( $row = pg_fetch_array( $result, null, PGSQL_ASSOC ) ) {
 		$node_id = $row['id'];		
 				
