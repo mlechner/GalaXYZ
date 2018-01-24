@@ -39,7 +39,6 @@ function addDirectionPoint(x, y) {
 
         var isInside = validateNewPoint(point);
 
-
         if(!isInside){
 
 
@@ -72,16 +71,22 @@ function addDirectionPoint(x, y) {
  */
 function validateNewPoint(newPoint) {
 
-    var isInside = false;
+    var contains = false;
 
-      for(var i = 0; i < nogo_Poly.length; i++) {
-        isInside = turf.inside(newPoint, nogo_Poly[i]);
-        if(isInside){
-          break;
+    nogoAreas.eachLayer(function (layer) {
+
+        var nogo = layer.toGeoJSON();
+        
+        var isInside = turf.inside(newPoint, nogo);
+
+        if(isInside == true){
+
+            contains = true;
         }
-      }
 
-    return isInside;
+    });
+
+    return contains;
 }
 /**
  * Validates adding drawn nogo polygon by checking if it intersects with a direction point
@@ -91,21 +96,20 @@ function validateNewPoint(newPoint) {
  */
 function validateNogoPoly(polygon) {
 
-    var isInside = false;
+    var contains = false;
 
-    for(var i = 0; i < directionPoints.length; i++) {
+    directions.eachLayer(function (marker) {
+        
+        var turfPoint = turf.point([marker._latlng.lng, marker._latlng.lat]);
+        
+        var isInside = turf.inside(turfPoint, polygon);
 
-        var item = directionPoints[i];
-        var point = turf.point([item.geometry.coordinates[1], item.geometry.coordinates[0]]);
-
-        isInside = turf.inside(point, polygon);
-        if(isInside){
-            break;
+        if(isInside == true) {
+            contains = true;
         }
+    });
 
-    }
-
-    return isInside;
+    return contains;
 }
 
 /**
@@ -182,6 +186,12 @@ function renderDirectionPoint(node_id, point) {
 
         })
 
+        .on('dragstart', function (event) {
+
+            marker['previouslocation'] = marker.getLatLng();
+
+        })
+
         .on('dragend', function(event) {
 
             var newMarker = event.target;
@@ -189,7 +199,21 @@ function renderDirectionPoint(node_id, point) {
             var x = event.target.getLatLng().lng;
             var y = event.target.getLatLng().lat;
 
-            getClosestNode(x, y, node_id => onMarkerDragEnd(event, node_id));
+            console.log(event);
+
+            var contains = validateNewPoint(event.target.toGeoJSON());
+
+            if(!contains){
+
+                getClosestNode(x, y, node_id => onMarkerDragEnd(event, node_id));
+
+            } else{
+
+                marker.setLatLng(marker.previouslocation);
+                alert("Cannot drag marker inside a nogo area!");
+            }
+
+            
 
             
         })
@@ -314,15 +338,7 @@ function getAllNogoAreas() {
 function getFromToPoints() {
 
     var dirPoints = [];
-
-    //dirPoints["from"] = directionPoints[0].node_id;
-    //dirPoints["to"] = directionPoints[1].node_id;
-    /**
-    for (var i=0; i<directionPoints.length; i++) {
-        dirPoints[i] = directionPoints[i].node_id;
-    }
-    */
-
+    
     directions.eachLayer(function (marker) {
         dirPoints.push(marker.node_id);
     });
@@ -338,9 +354,17 @@ function getFromToPoints() {
 
 function getAntLineForLastDirPoint(to_latlng) {
 
+    var dirPoints = [];
+
+    directions.eachLayer(function (marker) {
+        var item = marker;
+        item['latlng'] = marker.getLatLng();
+        allPoint.push(item);
+    });
+
     try {
 
-        var lastPoint = directionPoints[directionPoints.length - 1];
+        var lastPoint = dirPoints[dirPoints.length - 1];
         var latlngs = [lastPoint.latlng, to_latlng];
 
         var options = {delay: 300, dashArray: [10, 20], weight: 5, color: "darkblue", pulseColor: "#FFFFFF"};
