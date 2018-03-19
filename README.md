@@ -30,6 +30,10 @@ After all that is done, download [the repository for the nogo queries themselves
 
 In pgAdmin, right-click on the database and select "Restore", and select the `nogo_dijkstra.backup` file in the `/db` folder.  That's it!
 
+Alternatively from command line (-O is needed, because dump has user-Information included):
+
+`pg_restore -d <db_name> -O ./db/nogo_dijkstra.backup`
+
 Note: if you want to use a different region, you can generate a network dataset for any region directly from [OpenStreetMap](https://www.openstreetmap.org/) data using the [osm2pgrouting](https://github.com/pgRouting/osm2pgrouting) utility.  Just be advised that the website uses queries hardcoded for an network edges table called `ways`.  So either use that for your network edges table name, or go into the website code and change it there.
 
 ## Setting up website
